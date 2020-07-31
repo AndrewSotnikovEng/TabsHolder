@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,6 +23,26 @@ namespace TabsHolder
         public AddTabWindow()
         {
             InitializeComponent();
+
+            
+
         }
+
+        private void AddBtn_Click(object sender, RoutedEventArgs e)
+        {
+
+            TabItem tabItem = new TabItem(urlInput.Text, Int32.Parse(ratingInput.Text));
+            MessengerStatic.Send(tabItem);
+
+        }
+
+
+        void AddTabWindow_Closing(object sender, CancelEventArgs e)
+        {
+            MessengerStatic.NotifyAttTabClosing("Add tab have been closed");
+            
+        }
+
+
     }
 }

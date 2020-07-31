@@ -4,6 +4,8 @@
              xmlns:local="clr-namespace:TabsHolder"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <local:MainWinViewModel x:Key="mainWinViewModel"/>
+        <local:AddTabWinViewModel x:Key="addTabWinViewModel"/>
+        
     </Application.Resources>
 </Application>

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TabsHolder
 {
-    class TabItem
+    public class TabItem
     {
         string url;
         int rating;
