@@ -14,10 +14,15 @@ namespace TabsHolder
         public static string getUrlTitle(string url)
         {
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-
-            var webGet = new HtmlWeb();
-            var document = webGet.Load(url);
-            var title = document.DocumentNode.SelectSingleNode("html/head/title").InnerText;
+            string title = null;
+            try
+            {
+                var webGet = new HtmlWeb();
+                var document = webGet.Load(url);
+                title = document.DocumentNode.SelectSingleNode("html/head/title").InnerText;
+            } catch (ArgumentException e) {
+                title = "Not possiblge to extrat title";
+            }
 
             return title;
         }

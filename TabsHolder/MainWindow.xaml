@@ -24,16 +24,26 @@
         <TextBlock Style="{StaticResource Title}">TABS HOLDER</TextBlock>
         <StackPanel Orientation="Horizontal" VerticalAlignment="Top">
             <DataGrid x:Name="tabItemsList"  ItemsSource="{Binding TabItems}" AutoGenerateColumns="False" Margin="85,0" HorizontalAlignment="Left"
-                  Width="710" Height="560" >
+                  Width="737" Height="560" CanUserAddRows="False">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Title" Width="600" Binding="{Binding Path=Title}" FontSize="14" />
-                    <DataGridTextColumn Header="Rating" Width="100" Binding="{Binding Path=Rating}" FontSize="14"/>
+                    <DataGridTextColumn Header="Title" Width="620" Binding="{Binding Path=Title}" FontSize="14" />
+                    <DataGridTextColumn Header="Rating" Width="50" Binding="{Binding Path=Rating}" FontSize="14"/>
+                    <DataGridTemplateColumn Header="" >
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel HorizontalAlignment="Center" Margin="20,0,0,0">
+                                    <CheckBox Width="35" IsChecked="{Binding Path=IsCheckedBoolean}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                 </DataGrid.Columns>
-                
+
             </DataGrid>
             <StackPanel Orientation="Vertical">
                 <Button Name="AddBtn" Style="{StaticResource Button}" Click="AddBtn_Click" >Add</Button>
                 <Button Name="DeleteBtn" Style="{StaticResource Button}" Click="DeleteBtn_Click">Delete</Button>
+                <Button Name="Open" Style="{StaticResource Button}" Margin="0,100,0,0" Click="Open_Click">Open</Button>
             </StackPanel>
         </StackPanel>
 

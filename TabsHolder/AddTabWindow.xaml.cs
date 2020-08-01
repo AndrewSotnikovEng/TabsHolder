@@ -31,7 +31,7 @@ namespace TabsHolder
         private void AddBtn_Click(object sender, RoutedEventArgs e)
         {
 
-            TabItem tabItem = new TabItem(urlInput.Text, Int32.Parse(ratingInput.Text));
+            TabItem tabItem = new TabItem(urlInput.Text, Int32.Parse(ratingInput.Text), 1);
             MessengerStatic.Send(tabItem);
 
         }
