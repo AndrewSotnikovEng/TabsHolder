@@ -1,6 +1,8 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Data.Entity;
 using System.IO;
 using System.Linq;
@@ -48,10 +50,11 @@ namespace TabsHolder
         {
             if (data is TabItem)
             {
-                TabItem tabItem = (TabItem) data;
+                TabItem tabItem = (TabItem)data;
                 mainWinViewModel.db.tabItems.Add(tabItem);
                 mainWinViewModel.db.SaveChanges();
                 mainWinViewModel.loadDbModels();
+                mainWinViewModel.InitialTabItems = mainWinViewModel.TabItems;
             }
         }
 
@@ -67,7 +70,7 @@ namespace TabsHolder
             for (int i = 0; i < mainWinViewModel.TabItems.Count; i++)
             {
                 if (tabItemsList.SelectedItem == null) break;
-                TabItem selectedItem = (TabItem) tabItemsList.SelectedItem;
+                TabItem selectedItem = (TabItem)tabItemsList.SelectedItem;
                 if (mainWinViewModel.TabItems.ElementAt(i).Title == selectedItem.Title)
                 {
                     mainWinViewModel.db.tabItems.Remove(mainWinViewModel.TabItems.ElementAt(i));
@@ -93,7 +96,8 @@ namespace TabsHolder
 
             //check browser location
             string browserPath = @"C:\Program Files\Mozilla Firefox\firefox.exe";
-            if (!File.Exists(browserPath))  {
+            if (!File.Exists(browserPath))
+            {
                 // Create OpenFileDialog
                 Microsoft.Win32.OpenFileDialog openFileDlg = new Microsoft.Win32.OpenFileDialog();
 
@@ -106,7 +110,7 @@ namespace TabsHolder
                     browserPath = openFileDlg.FileName;
                 }
             }
-                
+
 
             //open in browser
             System.Diagnostics.Process process = new System.Diagnostics.Process();
@@ -122,5 +126,33 @@ namespace TabsHolder
 
 
         }
+
+        private void OnKeyDownHandler(object sender, KeyEventArgs e)
+        {
+            if (mainWinViewModel.FilterWord == null) return;
+            if (mainWinViewModel.FilterWord != "")
+            {
+                ObservableCollection<TabItem> tmpTabItems = new ObservableCollection<TabItem>();
+                foreach (var item in mainWinViewModel.InitialTabItems)
+                {
+                    int index = item.Title.IndexOf(mainWinViewModel.FilterWord, 
+                        StringComparison.CurrentCultureIgnoreCase);
+                    if (index != -1)
+                    {
+                        tmpTabItems.Add(item);
+                    }
+                }
+                mainWinViewModel.TabItems = tmpTabItems;
+            } else
+            {
+                mainWinViewModel.TabItems = mainWinViewModel.InitialTabItems;
+            }
+        }
+
+
+        
+
+
+
     }
 }

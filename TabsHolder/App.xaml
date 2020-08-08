@@ -2,10 +2,5 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:TabsHolder"
-             StartupUri="MainWindow.xaml">
-    <Application.Resources>
-        <local:MainWinViewModel x:Key="mainWinViewModel"/>
-        <local:AddTabWinViewModel x:Key="addTabWinViewModel"/>
-        
-    </Application.Resources>
+             StartupUri="View/MainWindow.xaml">
 </Application>

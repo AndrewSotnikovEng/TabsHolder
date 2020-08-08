@@ -5,11 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TabsHolder"
         mc:Ignorable="d"
-        Title="MainWindow" Height="800" Width="1000">
+        Title="MainWindow" Height="800" Width="1000" Background="DarkGray">
     <Window.Resources>
         <Style x:Key="Title" >
             <Setter Property="TextBlock.FontSize" Value="32"/>
-            <Setter Property="TextBlock.Margin" Value="85,40"/>
+            <Setter Property="TextBlock.Margin" Value="85,0,0,10"/>
             <Setter Property="TextBlock.Width" Value="300"/>
             <Setter Property="TextBlock.HorizontalAlignment" Value="Left"/>
         </Style>
@@ -22,8 +22,12 @@
     </Window.Resources>
     <StackPanel x:Name="ParentElem" Orientation="Vertical">
         <TextBlock Style="{StaticResource Title}">TABS HOLDER</TextBlock>
-        <StackPanel Orientation="Horizontal" VerticalAlignment="Top">
-            <DataGrid x:Name="tabItemsList"  ItemsSource="{Binding TabItems}" AutoGenerateColumns="False" Margin="85,0" HorizontalAlignment="Left"
+        <StackPanel Orientation="Horizontal">
+            <TextBox Margin="85,0,0,20" Width="500" HorizontalAlignment="Left" KeyDown="OnKeyDownHandler" Text="{Binding Path=FilterWord, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
+            <CheckBox IsChecked="{Binding CheckAll, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}" Margin="200,0,0,0" />
+        </StackPanel>
+    <StackPanel Orientation="Horizontal" VerticalAlignment="Top">
+            <DataGrid x:Name="tabItemsList"  ItemsSource="{Binding TabItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False" Margin="85,0" HorizontalAlignment="Left"
                   Width="737" Height="560" CanUserAddRows="False">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Title" Width="620" Binding="{Binding Path=Title}" FontSize="14" />
@@ -32,7 +36,7 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel HorizontalAlignment="Center" Margin="20,0,0,0">
-                                    <CheckBox Width="35" IsChecked="{Binding Path=IsCheckedBoolean}" />
+                                    <CheckBox Width="35" IsChecked="{Binding IsCheckedBoolean, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  />
                                 </StackPanel>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
