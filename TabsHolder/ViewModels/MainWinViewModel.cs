@@ -7,16 +7,19 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Data;
+using TabsHolder.ViewModels;
 
 namespace TabsHolder
 {
-    public class MainWinViewModel : INotifyPropertyChanged
+    public class MainWinViewModel : ViewModelBase
     {
         public ApplicationContext db;
         private ObservableCollection<TabItem> tabItems = new ObservableCollection<TabItem>();
         private ObservableCollection<TabItem> initialTabItems = new ObservableCollection<TabItem>();
         private string filterWord;
         private bool checkAll;
+        private ICollectionView tabItemsView;
 
 
         public MainWinViewModel()
@@ -24,6 +27,8 @@ namespace TabsHolder
 
             db = new ApplicationContext();
             loadDbModels();
+            tabItemsView = CollectionViewSource.GetDefaultView(TabItems);
+            tabItemsView.Filter = o => String.IsNullOrEmpty(FilterWord) ? true : ((TabItem)o).Title.Contains(FilterWord);
         }
 
         public ObservableCollection<TabItem> TabItems
@@ -32,7 +37,7 @@ namespace TabsHolder
             set
             {
                 tabItems = value;
-                NotifyPropertyChanged();
+
             }
         }
         public string FilterWord
@@ -43,8 +48,16 @@ namespace TabsHolder
             }
             set
             {
-                filterWord = value;
+                if (value != filterWord)
+                {
+                    filterWord = value;
+                    tabItemsView.Refresh();
+                    OnPropertyChanged("FilterWord");
+                }
             }
+
+
+
         }
 
         public ObservableCollection<TabItem> InitialTabItems { get => initialTabItems; set => initialTabItems = value; }
@@ -61,13 +74,18 @@ namespace TabsHolder
 
         private void toggleCheckBoxes(bool isChecked)
         {
-            ObservableCollection<TabItem> tmpTabItems = tabItems;
+            ObservableCollection<TabItem> tmpTabItems = new ObservableCollection <TabItem > (TabItems);
             for (int i = 0; i < tabItems.Count; i++)
             {
                 tmpTabItems.ElementAt(i).IsCheckedBoolean = isChecked;
             }
-            TabItems = tmpTabItems;
+            TabItems.Clear();
+            foreach (TabItem item in tmpTabItems)
+            {
+                TabItems.Add(item);
+            }
         }
+
 
         public void loadDbModels()
         {
@@ -81,15 +99,7 @@ namespace TabsHolder
             InitialTabItems = TabItems;
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
 
-        private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
-        }
     }
 
 }

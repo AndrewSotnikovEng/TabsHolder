@@ -1,17 +1,19 @@
-﻿using System;
+﻿using HtmlAgilityPack;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TabsHolder 
+namespace TabsHolder
 {
     [Table("tab_items")]
-    public class TabItem : INotifyPropertyChanged
+    public class TabItem
     {
 
         int id;
@@ -19,6 +21,7 @@ namespace TabsHolder
         int rating;
         int isChecked;
         bool isCheckedBoolean;
+        string title;
 
 
         public TabItem(string url, int rating, int isChecked)
@@ -32,41 +35,49 @@ namespace TabsHolder
         {
         }
 
-        public string Title { get => TabItemService.getUrlTitle(url); }
-        public string Url { get => url; set => url = value; }
-        public int Rating { get => rating; set => rating = value; }
-        public int IsChecked { get => isChecked;
-            set
+        public string Title
+        {
+            get
             {
-                isChecked = value;
-            }
-            }
-
-        [Key]
-        public int ID { get => id; set => id = value; }
-
-        [NotMapped]
-        public bool IsCheckedBoolean { 
-            get {
-                return Convert.ToBoolean(IsChecked);
-            }
-
-            set { 
-                isCheckedBoolean = value;
-                NotifyPropertyChanged();
+                if (title == null)
+                {
+                    title = TabItemService.getUrlTitle(Url);
+                }
+                return title;
             }
         }
+
+
+public string Url { get => url; set => url = value; }
+public int Rating { get => rating; set => rating = value; }
+public int IsChecked
+{
+    get => isChecked;
+    set
+    {
+        isChecked = value;
+    }
+}
+
+[Key]
+public int ID { get => id; set => id = value; }
+
+[NotMapped]
+public bool IsCheckedBoolean
+{
+    get
+    {
+        return Convert.ToBoolean(IsChecked);
+    }
+
+    set
+    {
+        isCheckedBoolean = value;
+
+    }
+}
 
         
-        public event PropertyChangedEventHandler PropertyChanged;
 
-
-        private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
-        }
     }
 }

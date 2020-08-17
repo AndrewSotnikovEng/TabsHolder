@@ -23,7 +23,7 @@
     <StackPanel x:Name="ParentElem" Orientation="Vertical">
         <TextBlock Style="{StaticResource Title}">TABS HOLDER</TextBlock>
         <StackPanel Orientation="Horizontal">
-            <TextBox Margin="85,0,0,20" Width="500" HorizontalAlignment="Left" KeyDown="OnKeyDownHandler" Text="{Binding Path=FilterWord, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBox Margin="85,0,0,20" Width="500" HorizontalAlignment="Left"  Text="{Binding Path=FilterWord, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
             <CheckBox IsChecked="{Binding CheckAll, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}" Margin="200,0,0,0" />
         </StackPanel>
     <StackPanel Orientation="Horizontal" VerticalAlignment="Top">

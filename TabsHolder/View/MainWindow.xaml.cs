@@ -127,27 +127,7 @@ namespace TabsHolder
 
         }
 
-        private void OnKeyDownHandler(object sender, KeyEventArgs e)
-        {
-            if (mainWinViewModel.FilterWord == null) return;
-            if (mainWinViewModel.FilterWord != "")
-            {
-                ObservableCollection<TabItem> tmpTabItems = new ObservableCollection<TabItem>();
-                foreach (var item in mainWinViewModel.InitialTabItems)
-                {
-                    int index = item.Title.IndexOf(mainWinViewModel.FilterWord, 
-                        StringComparison.CurrentCultureIgnoreCase);
-                    if (index != -1)
-                    {
-                        tmpTabItems.Add(item);
-                    }
-                }
-                mainWinViewModel.TabItems = tmpTabItems;
-            } else
-            {
-                mainWinViewModel.TabItems = mainWinViewModel.InitialTabItems;
-            }
-        }
+      
 
 
         
