@@ -20,7 +20,6 @@ namespace TabsHolder
         string url;
         int rating;
         int isChecked;
-        bool isCheckedBoolean;
         string title;
 
 
@@ -48,36 +47,35 @@ namespace TabsHolder
         }
 
 
-public string Url { get => url; set => url = value; }
-public int Rating { get => rating; set => rating = value; }
-public int IsChecked
-{
-    get => isChecked;
-    set
-    {
-        isChecked = value;
-    }
-}
+        public string Url { get => url; set => url = value; }
+        public int Rating { get => rating; set => rating = value; }
+        public int IsChecked
+        {
+            get => isChecked;
+            set
+            {
+                isChecked = value;
+            }
+        }
 
-[Key]
-public int ID { get => id; set => id = value; }
+        [Key]
+        public int ID { get => id; set => id = value; }
 
-[NotMapped]
-public bool IsCheckedBoolean
-{
-    get
-    {
-        return Convert.ToBoolean(IsChecked);
-    }
+        [NotMapped]
+        public bool IsCheckedBoolean
+        {
+            get
+            {
+                return Convert.ToBoolean(IsChecked);
+            }
 
-    set
-    {
-        isCheckedBoolean = value;
+            set
+            {
+                IsChecked = Convert.ToInt32(value);
+            }
+        }
 
-    }
-}
 
-        
 
     }
 }

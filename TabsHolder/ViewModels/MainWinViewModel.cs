@@ -33,11 +33,14 @@ namespace TabsHolder
 
         public ObservableCollection<TabItem> TabItems
         {
-            get => tabItems;
+            get 
+            {
+                return tabItems;
+            }
             set
             {
                 tabItems = value;
-
+                OnPropertyChanged("TabItems");
             }
         }
         public string FilterWord
@@ -74,16 +77,23 @@ namespace TabsHolder
 
         private void toggleCheckBoxes(bool isChecked)
         {
-            ObservableCollection<TabItem> tmpTabItems = new ObservableCollection <TabItem > (TabItems);
-            for (int i = 0; i < tabItems.Count; i++)
+            ObservableCollection<TabItem> tmpTabItems = new ObservableCollection<TabItem>();
+            foreach (TabItem item in TabItems)
+            {
+                tmpTabItems.Add(item);
+            }
+
+            for (int i = 0; i < TabItems.Count; i++)
             {
                 tmpTabItems.ElementAt(i).IsCheckedBoolean = isChecked;
             }
+
             TabItems.Clear();
-            foreach (TabItem item in tmpTabItems)
+            foreach (var item in tmpTabItems)
             {
                 TabItems.Add(item);
             }
+
         }
 
 
