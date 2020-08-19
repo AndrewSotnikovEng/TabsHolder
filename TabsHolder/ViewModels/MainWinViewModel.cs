@@ -3,12 +3,17 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using System.Windows.Data;
+using TabsHolder.Commands;
 using TabsHolder.ViewModels;
+
 
 namespace TabsHolder
 {
@@ -21,6 +26,20 @@ namespace TabsHolder
         private bool checkAll;
         private ICollectionView tabItemsView;
 
+        private TabItem selectedItem;
+
+        public TabItem SelectedItem
+        {
+            get { return this.selectedItem; }
+            set
+            {
+                if (value != this.selectedItem)
+                {
+                    this.selectedItem = value;
+                    this.OnPropertyChanged("SelectedItem");
+                }
+            }
+        }
 
         public MainWinViewModel()
         {
@@ -28,7 +47,11 @@ namespace TabsHolder
             db = new ApplicationContext();
             loadDbModels();
             tabItemsView = CollectionViewSource.GetDefaultView(TabItems);
-            tabItemsView.Filter = o => String.IsNullOrEmpty(FilterWord) ? true : ((TabItem)o).Title.Contains(FilterWord);
+            tabItemsView.Filter = o => String.IsNullOrEmpty(FilterWord) ? 
+                    true : Regex.IsMatch(((TabItem)o).Title, $"{FilterWord}", RegexOptions.IgnoreCase);
+
+            DeleteTabItemCmd = new RelayCommand(o => { DeleteTabItem(); });
+            OpenInFirefoxCmd = new RelayCommand(o => { OpenInFirefox(); });
         }
 
         public ObservableCollection<TabItem> TabItems
@@ -110,6 +133,77 @@ namespace TabsHolder
         }
 
 
+        private void DeleteTabItem()
+        {
+            for (int i = 0; i < TabItems.Count; i++)
+            {
+                if (SelectedItem == null) break;
+                if (TabItems.ElementAt(i).Title == SelectedItem.Title)
+                {
+                    db.tabItems.Remove(TabItems.ElementAt(i));
+                    db.SaveChanges();
+                    loadDbModels();
+                }
+            }
+        }
+
+        public RelayCommand DeleteTabItemCmd
+        {
+            get;
+            private set;
+        }
+
+        public RelayCommand OpenInFirefoxCmd
+        {
+            get;
+            private set;
+        }
+
+
+        private void OpenInFirefox()
+        {
+            //get urls
+            List<string> urls = new List<string>();
+            foreach (TabItem item in TabItems)
+            {
+                if (item.IsCheckedBoolean)
+                {
+                    urls.Add(item.Url);
+
+                }
+            }
+            if (urls.Count == 0) return;
+
+            //check browser location
+            string browserPath = @"C:\Program Files\Mozilla Firefox\firefox.exe";
+            if (!File.Exists(browserPath))
+            {
+                // Create OpenFileDialog
+                Microsoft.Win32.OpenFileDialog openFileDlg = new Microsoft.Win32.OpenFileDialog();
+
+                // Launch OpenFileDialog by calling ShowDialog method
+                Nullable<bool> result = openFileDlg.ShowDialog();
+                // Get the selected file name and display in a TextBox.
+                // Load content of file in a TextBlock
+                if (result == true)
+                {
+                    browserPath = openFileDlg.FileName;
+                }
+            }
+
+
+            //open in browser
+            System.Diagnostics.Process process = new System.Diagnostics.Process();
+            System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
+            startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+            startInfo.FileName = "cmd.exe";
+            foreach (string url in urls)
+            {
+                startInfo.Arguments = $"/C \"{browserPath}\" -new-tab -url {url}";
+                process.StartInfo = startInfo;
+                process.Start();
+            }
+        }
     }
 
 }
