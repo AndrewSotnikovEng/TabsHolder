@@ -6,7 +6,9 @@
         xmlns:local="clr-namespace:TabsHolder"
         mc:Ignorable="d"
         Title="Please add new tab" Height="300" Width="700"
-        Closing="AddTabWindow_Closing">
+        Closing="AddTabWindow_Closing"
+        Background="#272822"
+        WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <Style x:Key="Button" >
             <Setter Property="Button.FontSize" Value="14"/>
@@ -17,9 +19,9 @@
     </Window.Resources>
     <StackPanel Orientation="Vertical">
         <StackPanel Orientation="Vertical" Margin="20,10,20,0">
-            <TextBlock Margin="0,20,0,0">Insert URL below:</TextBlock>
+            <TextBlock Margin="0,20,0,0" Foreground="#f8f8f2">Insert URL below:</TextBlock>
             <TextBox x:Name="urlInput" Width="600" Margin="0,0,0,0" HorizontalAlignment="Left" Text="{Binding Url}"></TextBox>
-            <TextBlock Margin="0,20,0,0">Rate Me :):</TextBlock>
+            <TextBlock Margin="0,20,0,0" Foreground="#f8f8f2"> Rate Me :):</TextBlock>
             <TextBox x:Name="ratingInput" Width="600" HorizontalAlignment="Left" Text="{Binding Title}"></TextBox>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Margin="0,60,55,0" HorizontalAlignment="Right">

@@ -75,7 +75,5 @@ namespace TabsHolder
             }
         }
 
-
-
     }
 }
