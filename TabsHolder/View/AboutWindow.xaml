@@ -1,0 +1,41 @@
+﻿<Window x:Class="TabsHolder.View.AboutWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TabsHolder.View"
+        mc:Ignorable="d"
+        Title="About" Height="437.183" Width="870.562" Background="#272822"
+        WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <Style x:Key="TextBlock" >
+            <Setter Property="TextBlock.FontSize" Value="20"/>
+            <Setter Property="TextBlock.HorizontalAlignment" Value="Left"/>
+            <Setter Property="TextBlock.Foreground" Value="#f8f8f2"/>
+        </Style>
+
+    </Window.Resources>
+    
+    <Grid>
+        <StackPanel>
+            <TextBlock Style="{StaticResource TextBlock}" Width="600" FontSize="30" Margin="100,80,0,0"> Keep evertything you want, near to you :)</TextBlock>
+            <StackPanel>
+                <Grid Margin="100, 80" HorizontalAlignment="Left" VerticalAlignment="Top">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition MinWidth="80"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="50"/>
+                        <RowDefinition Height="50"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Style="{StaticResource TextBlock}"  Grid.Row="0" Grid.Column="0" Grid.RowSpan="2">Author:</TextBlock>
+                    <TextBlock Style="{StaticResource TextBlock}" Grid.Row="0" Grid.Column="1">Andrew Sotnikov</TextBlock>
+                    <TextBlock Style="{StaticResource TextBlock}" Grid.Row="1" Grid.Column="0">E-mail:</TextBlock>
+                    <TextBlock Style="{StaticResource TextBlock}" Grid.Row="1" Grid.Column="1">andrew.sotnikov@zoho.com</TextBlock>
+                </Grid>
+            </StackPanel>
+        </StackPanel>
+
+    </Grid>
+</Window>

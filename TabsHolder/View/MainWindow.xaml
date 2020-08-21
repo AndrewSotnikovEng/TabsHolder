@@ -30,7 +30,7 @@
                 <MenuItem Header="Save As.."/>
             </MenuItem>
             <MenuItem Header="Help">
-                <MenuItem Header="About"/>
+                <MenuItem Header="About" Command="{Binding OpenAboutWindowCmd}"/>
             </MenuItem>
         </Menu>
         <TextBlock Style="{StaticResource Title}">TABS HOLDER</TextBlock>

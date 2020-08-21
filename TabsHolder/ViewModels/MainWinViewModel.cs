@@ -13,7 +13,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using TabsHolder.Commands;
 using TabsHolder.ViewModels;
-
+using TabsHolder.View;
 
 namespace TabsHolder
 {
@@ -52,6 +52,7 @@ namespace TabsHolder
 
             DeleteTabItemCmd = new RelayCommand(o => { DeleteTabItem(); });
             OpenInFirefoxCmd = new RelayCommand(o => { OpenInFirefox(); });
+            OpenAboutWindowCmd = new RelayCommand(o => { OpenAboutWindow(); });
         }
 
         public ObservableCollection<TabItem> TabItems
@@ -159,6 +160,11 @@ namespace TabsHolder
             private set;
         }
 
+        public RelayCommand OpenAboutWindowCmd
+        {
+            get;
+            private set;
+        }
 
         private void OpenInFirefox()
         {
@@ -203,6 +209,12 @@ namespace TabsHolder
                 process.StartInfo = startInfo;
                 process.Start();
             }
+        }
+
+        private void OpenAboutWindow()
+        {
+            AboutWindow about = new AboutWindow();
+            about.Show();
         }
     }
 
