@@ -22,27 +22,15 @@ namespace TabsHolder
     {
         public AddTabWindow()
         {
+            AddTabWinViewModel addTabWinViewModel =  new AddTabWinViewModel();
             InitializeComponent();
-
-            
-
-        }
-
-        private void AddBtn_Click(object sender, RoutedEventArgs e)
-        {
-
-            TabItem tabItem = new TabItem(urlInput.Text, Int32.Parse(ratingInput.Text), 1);
-            MessengerStatic.Send(tabItem);
-
+            DataContext = addTabWinViewModel;
         }
 
 
         void AddTabWindow_Closing(object sender, CancelEventArgs e)
         {
-            MessengerStatic.NotifyAttTabClosing("Add tab have been closed");
-            
+            MessengerStatic.NotifyAddTabClosing("Add tab have been closed");
         }
-
-
     }
 }

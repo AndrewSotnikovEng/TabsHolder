@@ -53,6 +53,10 @@ namespace TabsHolder
             DeleteTabItemCmd = new RelayCommand(o => { DeleteTabItem(); });
             OpenInFirefoxCmd = new RelayCommand(o => { OpenInFirefox(); });
             OpenAboutWindowCmd = new RelayCommand(o => { OpenAboutWindow(); });
+            AddBtnClickCmd = new RelayCommand(o => { AddBtnСlick(); });
+
+
+            MessengerStatic.CloseAddTabWindow += AddTabClosing;
         }
 
         public ObservableCollection<TabItem> TabItems
@@ -134,6 +138,7 @@ namespace TabsHolder
         }
 
 
+
         private void DeleteTabItem()
         {
             for (int i = 0; i < TabItems.Count; i++)
@@ -148,6 +153,14 @@ namespace TabsHolder
             }
         }
 
+        private void AddBtnСlick()
+        {
+            AddTabWindow addTabWin = new AddTabWindow();
+            addTabWin.Show();
+            MessengerStatic.Bus += Receive;
+        }
+
+
         public RelayCommand DeleteTabItemCmd
         {
             get;
@@ -161,6 +174,12 @@ namespace TabsHolder
         }
 
         public RelayCommand OpenAboutWindowCmd
+        {
+            get;
+            private set;
+        }
+
+        public RelayCommand AddBtnClickCmd
         {
             get;
             private set;
@@ -215,6 +234,23 @@ namespace TabsHolder
         {
             AboutWindow about = new AboutWindow();
             about.Show();
+        }
+
+        private void Receive(object data)
+        {
+            if (data is TabItem)
+            {
+                TabItem tabItem = (TabItem)data;
+                db.tabItems.Add(tabItem);
+                db.SaveChanges();
+                loadDbModels();
+                InitialTabItems = TabItems;
+            }
+        }
+
+        private void AddTabClosing(object data)
+        {
+            MessengerStatic.Bus -= Receive;
         }
     }
 

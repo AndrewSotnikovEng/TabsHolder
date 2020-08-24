@@ -22,11 +22,10 @@
             <TextBlock Margin="0,20,0,0" Foreground="#f8f8f2">Insert URL below:</TextBlock>
             <TextBox x:Name="urlInput" Width="600" Margin="0,0,0,0" HorizontalAlignment="Left" Text="{Binding Url}"></TextBox>
             <TextBlock Margin="0,20,0,0" Foreground="#f8f8f2"> Rate Me :):</TextBlock>
-            <TextBox x:Name="ratingInput" Width="600" HorizontalAlignment="Left" Text="{Binding Title}"></TextBox>
+            <TextBox x:Name="ratingInput" Width="600" HorizontalAlignment="Left" Text="{Binding Rating, Mode=TwoWay}"></TextBox>
         </StackPanel>
-        <StackPanel Orientation="Horizontal" Margin="0,60,55,0" HorizontalAlignment="Right">
-            <Button Name="AddBtn" Style="{StaticResource Button}" Click="AddBtn_Click" >Add</Button>
-            <Button Name="DeleteBtn" Style="{StaticResource Button}">Delete</Button>
+        <StackPanel Orientation="Horizontal" Margin="0,60,65,0" HorizontalAlignment="Right">
+            <Button Name="AddBtn" Style="{StaticResource Button}" Command="{Binding AddBtnClickCmd}" >Add</Button>
         </StackPanel>
     </StackPanel>
 </Window>

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TabsHolder"
         mc:Ignorable="d"
-        Title="MainWindow" Height="800" Width="1000" Background="#272822"
+        Title="MainWindow" Height="700" Width="1000" Background="#272822"
         WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <Style x:Key="Title" >
@@ -40,7 +40,7 @@
         </StackPanel>
     <StackPanel Orientation="Horizontal" VerticalAlignment="Top">
             <DataGrid x:Name="tabItemsList"  ItemsSource="{Binding TabItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False" Margin="85,0" HorizontalAlignment="Left"
-                  Width="737" Height="560" CanUserAddRows="False" SelectedItem="{Binding SelectedItem}">
+                  Width="737" Height="500" CanUserAddRows="False" SelectedItem="{Binding SelectedItem}">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Title" Width="620" Binding="{Binding Path=Title}" FontSize="14" />
                     <DataGridTextColumn Header="Rating" Width="50" Binding="{Binding Path=Rating}" FontSize="14"/>
@@ -57,7 +57,7 @@
 
             </DataGrid>
             <StackPanel Orientation="Vertical">
-                <Button Name="AddBtn" Style="{StaticResource Button}" Click="AddBtn_Click" >Add</Button>
+                <Button Name="AddBtn" Style="{StaticResource Button}" Command="{Binding AddBtnClickCmd}" >Add</Button>
                 <Button Name="DeleteBtn" Style="{StaticResource Button}" Command="{Binding DeleteTabItemCmd}" >Delete</Button>
                 <Button Name="Open" Style="{StaticResource Button}" Margin="0,100,0,0" Command="{Binding OpenInFirefoxCmd}" >Open</Button>
             </StackPanel>
