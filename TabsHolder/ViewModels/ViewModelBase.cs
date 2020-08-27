@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace TabsHolder.ViewModels
 {
-    public class ViewModelBase
+    public class ViewModelBase : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged(string propertyName)

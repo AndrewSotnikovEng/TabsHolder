@@ -20,12 +20,32 @@
     <StackPanel Orientation="Vertical">
         <StackPanel Orientation="Vertical" Margin="20,10,20,0">
             <TextBlock Margin="0,20,0,0" Foreground="#f8f8f2">Insert URL below:</TextBlock>
-            <TextBox x:Name="urlInput" Width="600" Margin="0,0,0,0" HorizontalAlignment="Left" Text="{Binding Url}"></TextBox>
+            <!--..<TextBox x:Name="urlInput" Width="600" Margin="0,0,0,0" HorizontalAlignment="Left" Text="{Binding Url, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"> -->
+            <TextBox Width="600" HorizontalAlignment="Left">
+                <TextBox.Text>
+                    <Binding Path="Url">
+                        <Binding.ValidationRules>
+                            <DataErrorValidationRule />
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
             <TextBlock Margin="0,20,0,0" Foreground="#f8f8f2"> Rate Me :):</TextBlock>
-            <TextBox x:Name="ratingInput" Width="600" HorizontalAlignment="Left" Text="{Binding Rating, Mode=TwoWay}"></TextBox>
+            <!-- 
+            <TextBox Width="600" HorizontalAlignment="Left" Text="{Binding Rating, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidationRules=DataErrorValidationRule}"></TextBox>
+            -->
+            <TextBox Width="600" HorizontalAlignment="Left">
+                <TextBox.Text>
+                    <Binding Path="Rating">
+                        <Binding.ValidationRules>
+                            <DataErrorValidationRule />
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Margin="0,60,65,0" HorizontalAlignment="Right">
-            <Button Name="AddBtn" Style="{StaticResource Button}" Command="{Binding AddBtnClickCmd}" >Add</Button>
+            <Button Name="AddBtn" Style="{StaticResource Button}" Command="{Binding AddBtnClickCmd}" IsEnabled="{Binding Path=(Validation.HasError)}">Add</Button>
         </StackPanel>
     </StackPanel>
 </Window>

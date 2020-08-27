@@ -15,22 +15,20 @@ using System.Windows.Shapes;
 
 namespace TabsHolder
 {
-    /// <summary>
-    /// Interaction logic for Window1.xaml
-    /// </summary>
+
     public partial class AddTabWindow : Window
     {
         public AddTabWindow()
         {
-            AddTabWinViewModel addTabWinViewModel =  new AddTabWinViewModel();
+            
             InitializeComponent();
-            DataContext = addTabWinViewModel;
+            DataContext = new AddTabWinViewModel();
         }
 
 
         void AddTabWindow_Closing(object sender, CancelEventArgs e)
         {
-            MessengerStatic.NotifyAddTabClosing("Add tab have been closed");
+            MessengerStatic.NotifyAttTabClosing("Add tab have been closed");
         }
     }
 }
