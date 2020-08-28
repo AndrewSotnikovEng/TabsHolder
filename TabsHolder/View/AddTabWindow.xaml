@@ -45,7 +45,7 @@
             </TextBox>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Margin="0,60,65,0" HorizontalAlignment="Right">
-            <Button Name="AddBtn" Style="{StaticResource Button}" Command="{Binding AddBtnClickCmd}" IsEnabled="{Binding Path=(Validation.HasError)}">Add</Button>
+            <Button Name="AddBtn" Style="{StaticResource Button}" Command="{Binding AddBtnClickCmd}">Add</Button>
         </StackPanel>
     </StackPanel>
 </Window>

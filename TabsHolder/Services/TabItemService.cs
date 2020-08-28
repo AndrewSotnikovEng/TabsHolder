@@ -24,8 +24,12 @@ namespace TabsHolder
                 title = "Not possible to extrat title";
             } catch (UriFormatException e)
             {
-
+                title = "Not possible to extrat title";
+            } catch (ArgumentException e)
+            {
+                title = "Not possible to extrat title";
             }
+
 
             return title;
         }

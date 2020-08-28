@@ -35,15 +35,17 @@ namespace TabsHolder
 
         public AddTabWinViewModel()
         {
-            AddBtnClickCmd = new RelayCommand(o => { AddBtnСlick(); });
-            
+            AddBtnClickCmd = new RelayCommand(o => { AddBtnСlick(); }, CanExecute);
+
 
 
         }
 
 
-        public string Url { get => url; 
-        set
+        public string Url
+        {
+            get => url;
+            set
             {
                 url = value;
                 //string pattern = "^https?://.*";
@@ -117,5 +119,37 @@ namespace TabsHolder
             }
         }
 
+        public bool CanExecute(object parameter)
+        {
+            bool result = false;
+
+            bool urlIsValid = false;
+            bool ratingIsValid = false;
+
+            string pattern = "^https?://.*";
+            if (Url == null) return false;
+            var match = Regex.Match(Url, pattern);
+            if (match.Success)
+            {
+                urlIsValid = true;
+            }
+
+            if (Rating > 1 && Rating < 10)
+            {
+                ratingIsValid = true;
+            }
+
+            if (urlIsValid && ratingIsValid)
+            {
+                result = true;
+            }
+
+            return result;
+        }
+
+
     }
+
+
+
 }
