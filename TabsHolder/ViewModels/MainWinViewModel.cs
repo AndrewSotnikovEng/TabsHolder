@@ -14,6 +14,8 @@ using System.Windows.Data;
 using TabsHolder.Commands;
 using TabsHolder.ViewModels;
 using TabsHolder.View;
+using TabsHolder.Services;
+using TabsHolder.Data;
 
 namespace TabsHolder
 {
@@ -25,8 +27,10 @@ namespace TabsHolder
         private string filterWord;
         private bool checkAll;
         private ICollectionView tabItemsView;
+        private string browserPath = @"C:\Program Files\Mozilla Firefox\firefox.exe";
 
         private TabItem selectedItem;
+
 
         public TabItem SelectedItem
         {
@@ -54,9 +58,12 @@ namespace TabsHolder
             OpenInFirefoxCmd = new RelayCommand(o => { OpenInFirefox(); });
             OpenAboutWindowCmd = new RelayCommand(o => { OpenAboutWindow(); });
             AddBtnClickCmd = new RelayCommand(o => { AddBtnСlick(); });
-
+            SaveSessionCmd = new RelayCommand(o => { SaveSession(); });
+            LoadLastSessionCmd = new RelayCommand(o => { LoadLastSession(); });
 
             MessengerStatic.CloseAddTabWindow += AddTabClosing;
+
+            
         }
 
         public ObservableCollection<TabItem> TabItems
@@ -156,6 +163,25 @@ namespace TabsHolder
             MessengerStatic.Bus += Receive;
         }
 
+        private void LoadLastSession()
+        {
+            Session ses = XmlSerializerService.Deserialize("config.ses");
+            browserPath = ses.browserPath;
+            TabItems.Clear();
+            foreach (TabItem item in ses.TabItems)
+            {
+                TabItems.Add(item);
+            }
+
+        }
+        private void SaveSession()
+        {
+            Session ses = new Session();
+            ses.browserPath = browserPath;
+            ses.TabItems = TabItems;
+            XmlSerializerService.Serialize("config.ses", ses);
+        }
+
 
         public RelayCommand DeleteTabItemCmd
         {
@@ -181,6 +207,18 @@ namespace TabsHolder
             private set;
         }
 
+        public RelayCommand SaveSessionCmd
+        {
+            get;
+            private set;
+        }
+
+        public RelayCommand LoadLastSessionCmd
+        {
+            get;
+            private set;
+        }
+
         private void OpenInFirefox()
         {
             //get urls
@@ -196,7 +234,6 @@ namespace TabsHolder
             if (urls.Count == 0) return;
 
             //check browser location
-            string browserPath = @"C:\Program Files\Mozilla Firefox\firefox.exe";
             if (!File.Exists(browserPath))
             {
                 // Create OpenFileDialog

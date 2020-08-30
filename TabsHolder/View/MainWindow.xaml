@@ -26,8 +26,10 @@
     <StackPanel x:Name="ParentElem" Orientation="Vertical">
         <Menu>
             <MenuItem Header="File">
-                <MenuItem Header="Open"/>
-                <MenuItem Header="Save As.."/>
+                <MenuItem Header="Load" Command="{Binding LoadLastSessionCmd}"/>
+                <MenuItem Header="Save" Command="{Binding SaveSessionCmd}"/>
+                <Separator/>
+                <MenuItem Header="Exit"/>
             </MenuItem>
             <MenuItem Header="Help">
                 <MenuItem Header="About" Command="{Binding OpenAboutWindowCmd}"/>
@@ -54,7 +56,6 @@
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
                 </DataGrid.Columns>
-
             </DataGrid>
             <StackPanel Orientation="Vertical">
                 <Button Name="AddBtn" Style="{StaticResource Button}" Command="{Binding AddBtnClickCmd}" >Add</Button>

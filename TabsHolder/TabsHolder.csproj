@@ -132,6 +132,8 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Commands\RelayCommand.cs" />
+    <Compile Include="Data\Session.cs" />
+    <Compile Include="Services\XmlSerializerService.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="View\AddTabWindow.xaml.cs">
       <DependentUpon>AddTabWindow.xaml</DependentUpon>

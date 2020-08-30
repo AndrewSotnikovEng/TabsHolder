@@ -18,7 +18,7 @@
     
     <Grid>
         <StackPanel>
-            <TextBlock Style="{StaticResource TextBlock}" Width="600" FontSize="30" Margin="100,80,0,0"> Keep evertything you want, near to you :)</TextBlock>
+            <TextBlock Style="{StaticResource TextBlock}" Width="600" FontSize="30" Margin="100,80,0,0"> Keep everything you want, near to you :)</TextBlock>
             <StackPanel>
                 <Grid Margin="100, 80" HorizontalAlignment="Left" VerticalAlignment="Top">
                     <Grid.ColumnDefinitions>
