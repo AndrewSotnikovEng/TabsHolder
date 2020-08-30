@@ -21,13 +21,16 @@ namespace TabsHolder
                 var document = webGet.Load(url);
                 title = document.DocumentNode.SelectSingleNode("html/head/title").InnerText;
             } catch (NullReferenceException e) {
-                title = "Not possible to extrat title";
+                Console.WriteLine(e.Message);
             } catch (UriFormatException e)
             {
-                title = "Not possible to extrat title";
+                Console.WriteLine(e.Message);
             } catch (ArgumentException e)
             {
-                title = "Not possible to extrat title";
+                Console.WriteLine(e.Message);
+            } catch (WebException e)
+            {
+                Console.WriteLine(e.Message);
             }
 
 

@@ -15,51 +15,28 @@ namespace TabsHolder
     [Table("tab_items")]
     public class TabItem
     {
-
-        int id;
-        string url;
-        int rating;
-        int isChecked;
-        string title;
-
-
         public TabItem(string url, int rating, int isChecked)
         {
             this.Url = url;
             this.Rating = rating;
             this.IsChecked = isChecked;
+            this.Title = TabItemService.getUrlTitle(Url);
+
         }
 
         public TabItem()
         {
         }
 
-        public string Title
-        {
-            get
-            {
-                if (title == null)
-                {
-                    title = TabItemService.getUrlTitle(Url);
-                }
-                return title;
-            }
-        }
+        public string Title { get; set; }
 
 
-        public string Url { get => url; set => url = value; }
-        public int Rating { get => rating; set => rating = value; }
-        public int IsChecked
-        {
-            get => isChecked;
-            set
-            {
-                isChecked = value;
-            }
-        }
+        public string Url { get; set; }
+        public int Rating { get; set; }
+        public int IsChecked { get; set; }
 
         [Key]
-        public int ID { get => id; set => id = value; }
+        public int ID { get; set; }
 
         [NotMapped]
         public bool IsCheckedBoolean

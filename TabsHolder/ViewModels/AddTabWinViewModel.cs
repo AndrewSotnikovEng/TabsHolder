@@ -7,78 +7,23 @@ namespace TabsHolder
 {
     public class AddTabWinViewModel : ViewModelBase, IDataErrorInfo
     {
-        string url;
-        int rating;
 
-        //bool urlValidationState = false;
-        //bool ratingValidationState = false;
-
-
-
-        //public bool ButtonEnableState
-        //{
-        //    get
-        //    {
-        //        bool state = false;
-        //        if (UrlValidationState && RatingValidationState)
-        //        {
-        //            state = true;
-        //        }
-        //        return state;
-        //    }        
-        //    set
-        //    {
-        //        OnPropertyChanged("ButtonEnableState");
-        //    }
-        //}
-
-
+   
         public AddTabWinViewModel()
         {
             AddBtnClickCmd = new RelayCommand(o => { AddBtnСlick(); }, CanExecute);
-
-
-
         }
 
 
-        public string Url
-        {
-            get => url;
-            set
-            {
-                url = value;
-                //string pattern = "^https?://.*";
-                //var match = Regex.Match(value, pattern);
-                //if (match.Success)
-                //{
-                //    UrlValidationState = true;
-                //    ButtonEnableState = false;
-                //}
-            }
-        }
+        public string Url { get; set; }
 
-        public int Rating
-        {
-            get => rating;
-            set
-            {
-                rating = value;
-                //if (value >=1 && value <= 10)
-                //{
-                //    RatingValidationState = true;
-                //    ButtonEnableState = false;
-                //}
-            }
-        }
+        public int Rating { get; set; }
 
 
         private void AddBtnСlick()
         {
-
             TabItem tabItem = new TabItem(Url, Rating, 0);
             MessengerStatic.Send(tabItem);
-
         }
 
         public RelayCommand AddBtnClickCmd
@@ -86,8 +31,6 @@ namespace TabsHolder
             get;
             private set;
         }
-        //public bool UrlValidationState { get => urlValidationState; set => urlValidationState = value; }
-        //public bool RatingValidationState { get => ratingValidationState; set => ratingValidationState = value; }
 
         public string Error => null;
 
@@ -134,7 +77,7 @@ namespace TabsHolder
                 urlIsValid = true;
             }
 
-            if (Rating > 1 && Rating < 10)
+            if (Rating >= 1 && Rating <= 10)
             {
                 ratingIsValid = true;
             }
@@ -146,8 +89,6 @@ namespace TabsHolder
 
             return result;
         }
-
-
     }
 
 

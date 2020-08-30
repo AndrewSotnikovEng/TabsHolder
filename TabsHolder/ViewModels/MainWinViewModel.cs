@@ -86,9 +86,6 @@ namespace TabsHolder
                     OnPropertyChanged("FilterWord");
                 }
             }
-
-
-
         }
 
         public ObservableCollection<TabItem> InitialTabItems { get => initialTabItems; set => initialTabItems = value; }
@@ -121,7 +118,6 @@ namespace TabsHolder
             {
                 TabItems.Add(item);
             }
-
         }
 
 
@@ -253,5 +249,4 @@ namespace TabsHolder
             MessengerStatic.Bus -= Receive;
         }
     }
-
 }
