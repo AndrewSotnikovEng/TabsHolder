@@ -29,7 +29,7 @@
                 <MenuItem Header="Load" Command="{Binding LoadLastSessionCmd}"/>
                 <MenuItem Header="Save" Command="{Binding SaveSessionCmd}"/>
                 <Separator/>
-                <MenuItem Header="Exit"/>
+                <MenuItem Header="Exit" Command="{Binding ExitCmd}" />
             </MenuItem>
             <MenuItem Header="Help">
                 <MenuItem Header="About" Command="{Binding OpenAboutWindowCmd}"/>

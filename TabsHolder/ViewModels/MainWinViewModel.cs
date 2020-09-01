@@ -31,6 +31,10 @@ namespace TabsHolder
 
         private TabItem selectedItem;
 
+        internal void ClosingFromRightCorner(object sender, CancelEventArgs e)
+        {
+            SaveSession();   
+        }
 
         public TabItem SelectedItem
         {
@@ -60,6 +64,7 @@ namespace TabsHolder
             AddBtnClickCmd = new RelayCommand(o => { AddBtnСlick(); });
             SaveSessionCmd = new RelayCommand(o => { SaveSession(); });
             LoadLastSessionCmd = new RelayCommand(o => { LoadLastSession(); });
+            ExitCmd = new RelayCommand(o => { ExitApp(); });
 
             MessengerStatic.CloseAddTabWindow += AddTabClosing;
 
@@ -182,6 +187,12 @@ namespace TabsHolder
             XmlSerializerService.Serialize("config.ses", ses);
         }
 
+        public void ExitApp()
+        {
+            this.SaveSession();
+            MessengerStatic.NotifyMainWindowClosing(null);
+        }
+
 
         public RelayCommand DeleteTabItemCmd
         {
@@ -212,6 +223,13 @@ namespace TabsHolder
             get;
             private set;
         }
+
+        public RelayCommand ExitCmd
+        {
+            get;
+            private set;
+        }
+
 
         public RelayCommand LoadLastSessionCmd
         {

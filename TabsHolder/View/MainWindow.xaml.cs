@@ -26,26 +26,26 @@ namespace TabsHolder
     public partial class MainWindow : Window
     {
 
-        ApplicationContext db;
+        //ApplicationContext db;
+        MainWinViewModel mainWinViewModel = new MainWinViewModel();
         public MainWindow()
         {
             InitializeComponent();
 
-
-            this.DataContext = new MainWinViewModel(); 
+            
+            this.DataContext = mainWinViewModel;
+            MessengerStatic.CloseMainWindow += MainWindowClose;
+            Closing += mainWinViewModel.ClosingFromRightCorner;
 
 
         }
 
+        private void MainWindowClose(object obj)
+        {
+            this.Close();
+        }
 
 
-
-
-
-
-
-
-
-
+        
     }
 }
