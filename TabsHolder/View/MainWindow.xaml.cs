@@ -20,32 +20,40 @@ using System.Windows.Shapes;
 
 namespace TabsHolder
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
+
     public partial class MainWindow : Window
     {
 
-        //ApplicationContext db;
         MainWinViewModel mainWinViewModel = new MainWinViewModel();
         public MainWindow()
         {
             InitializeComponent();
-
             
             this.DataContext = mainWinViewModel;
+            //for closing via File -> Exit
             MessengerStatic.CloseMainWindow += MainWindowClose;
-            Closing += mainWinViewModel.ClosingFromRightCorner;
-
 
         }
 
-        private void MainWindowClose(object obj)
+        void MainWindowClose(object obj)
         {
             this.Close();
         }
 
+        //for closing via "X" sign
+        void ClosingFromRightCorner(object sender, CancelEventArgs e)
+        {
+            ((MainWinViewModel)DataContext).SaveSession();
+        }
 
-        
+        private void MainWindow_Loaded(object sender, EventArgs e)
+        {
+            ((MainWinViewModel)DataContext).LoadLastSession();
+        }
+
+        private void Window_Closing(object sender, CancelEventArgs e)
+        {
+
+        }
     }
 }

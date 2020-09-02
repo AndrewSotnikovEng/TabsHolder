@@ -23,7 +23,6 @@ namespace TabsHolder
     {
         public ApplicationContext db;
         private ObservableCollection<TabItem> tabItems = new ObservableCollection<TabItem>();
-        private ObservableCollection<TabItem> initialTabItems = new ObservableCollection<TabItem>();
         private string filterWord;
         private bool checkAll;
         private ICollectionView tabItemsView;
@@ -31,10 +30,6 @@ namespace TabsHolder
 
         private TabItem selectedItem;
 
-        internal void ClosingFromRightCorner(object sender, CancelEventArgs e)
-        {
-            SaveSession();   
-        }
 
         public TabItem SelectedItem
         {
@@ -100,7 +95,7 @@ namespace TabsHolder
             }
         }
 
-        public ObservableCollection<TabItem> InitialTabItems { get => initialTabItems; set => initialTabItems = value; }
+        public ObservableCollection<TabItem> InitialTabItems { get; set; } = new ObservableCollection<TabItem>();
         public bool CheckAll { 
         get {
                 return checkAll;
@@ -132,7 +127,6 @@ namespace TabsHolder
             }
         }
 
-
         public void loadDbModels()
         {
             db.tabItems.Load();
@@ -144,8 +138,6 @@ namespace TabsHolder
             }
             InitialTabItems = TabItems;
         }
-
-
 
         private void DeleteTabItem()
         {
@@ -168,7 +160,7 @@ namespace TabsHolder
             MessengerStatic.Bus += Receive;
         }
 
-        private void LoadLastSession()
+        public void LoadLastSession()
         {
             Session ses = XmlSerializerService.Deserialize("config.ses");
             browserPath = ses.browserPath;
@@ -179,7 +171,7 @@ namespace TabsHolder
             }
 
         }
-        private void SaveSession()
+        public void SaveSession()
         {
             Session ses = new Session();
             ses.browserPath = browserPath;
