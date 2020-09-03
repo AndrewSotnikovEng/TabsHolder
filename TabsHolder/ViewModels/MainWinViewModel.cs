@@ -57,9 +57,10 @@ namespace TabsHolder
             OpenInFirefoxCmd = new RelayCommand(o => { OpenInFirefox(); });
             OpenAboutWindowCmd = new RelayCommand(o => { OpenAboutWindow(); });
             AddBtnClickCmd = new RelayCommand(o => { AddBtnСlick(); });
+            SaveConfigCmd = new RelayCommand(o => { SaveConfig(); });
             SaveSessionCmd = new RelayCommand(o => { SaveSession(); });
-            LoadLastSessionCmd = new RelayCommand(o => { LoadLastSession(); });
-            ExitCmd = new RelayCommand(o => { ExitApp(); });
+
+            //LoadSessionCmd = new RelayCommand(o => { LoadSession(); });
 
             MessengerStatic.CloseAddTabWindow += AddTabClosing;
 
@@ -160,29 +161,46 @@ namespace TabsHolder
             MessengerStatic.Bus += Receive;
         }
 
-        public void LoadLastSession()
+        public void LoadConfig()
         {
-            Session ses = XmlSerializerService.Deserialize("config.ses");
+            string configFileName = "config.ses";
+            if (!File.Exists(configFileName)) return;
+            Session ses = XmlSerializerService.Deserialize(configFileName);
             browserPath = ses.browserPath;
-            TabItems.Clear();
-            foreach (TabItem item in ses.TabItems)
+        }
+
+
+        public void SaveSession()
+        {
+            // Configure save file dialog box
+            Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
+            dlg.FileName = $"Session_{DateTime.Now.ToString("ddmmhhmmss")}"; // Default file name
+            dlg.DefaultExt = ".ses"; // Default file extension
+            dlg.Filter = "Session files (.ses)|*.ses"; // Filter files by extension
+            dlg.InitialDirectory = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+
+            // Show save file dialog box
+            Nullable<bool> result = dlg.ShowDialog();
+
+            // Process save file dialog box results
+            if (result == true)
             {
-                TabItems.Add(item);
+                // Save document
+                string filename = dlg.FileName;
+                Session ses = new Session();
+                ses.browserPath = browserPath;
+                ses.TabItems = TabItems;
+                
+                XmlSerializerService.Serialize(filename, ses);
             }
 
         }
-        public void SaveSession()
+
+        public void SaveConfig()
         {
             Session ses = new Session();
             ses.browserPath = browserPath;
-            ses.TabItems = TabItems;
             XmlSerializerService.Serialize("config.ses", ses);
-        }
-
-        public void ExitApp()
-        {
-            this.SaveSession();
-            MessengerStatic.NotifyMainWindowClosing(null);
         }
 
 
@@ -210,20 +228,22 @@ namespace TabsHolder
             private set;
         }
 
+        public RelayCommand SaveConfigCmd
+        {
+            get;
+            private set;
+        }
+
         public RelayCommand SaveSessionCmd
         {
             get;
             private set;
         }
 
-        public RelayCommand ExitCmd
-        {
-            get;
-            private set;
-        }
 
 
-        public RelayCommand LoadLastSessionCmd
+
+        public RelayCommand LoadSessionCmd
         {
             get;
             private set;

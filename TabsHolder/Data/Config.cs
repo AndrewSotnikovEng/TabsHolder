@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace TabsHolder.Data
 {
-    public class Session : Config
+    public class Config
     {
-        public ObservableCollection<TabItem> TabItems;
+        public string browserPath;
     }
 }

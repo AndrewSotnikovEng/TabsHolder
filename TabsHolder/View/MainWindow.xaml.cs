@@ -30,25 +30,22 @@ namespace TabsHolder
             InitializeComponent();
             
             this.DataContext = mainWinViewModel;
-            //for closing via File -> Exit
-            MessengerStatic.CloseMainWindow += MainWindowClose;
 
         }
 
-        void MainWindowClose(object obj)
+        void MainWindowClose(object sender, RoutedEventArgs e)
         {
             this.Close();
         }
 
-        //for closing via "X" sign
-        void ClosingFromRightCorner(object sender, CancelEventArgs e)
+        void BeforeClosingActions(object sender, CancelEventArgs e)
         {
-            ((MainWinViewModel)DataContext).SaveSession();
+            ((MainWinViewModel)DataContext).SaveConfig();
         }
 
         private void MainWindow_Loaded(object sender, EventArgs e)
         {
-            ((MainWinViewModel)DataContext).LoadLastSession();
+            ((MainWinViewModel)DataContext).LoadConfig();
         }
 
         private void Window_Closing(object sender, CancelEventArgs e)

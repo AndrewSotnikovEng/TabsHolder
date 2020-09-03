@@ -22,14 +22,6 @@ namespace TabsHolder
         }
 
 
-        public static event Action<object> CloseMainWindow;
-        public static void NotifyMainWindowClosing(object data)
-        {
-            CloseMainWindow?.Invoke(data);
-        }
-
-
-
     }
 }
 
