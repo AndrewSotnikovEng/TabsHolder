@@ -24,12 +24,11 @@ namespace TabsHolder
     public partial class MainWindow : Window
     {
 
-        MainWinViewModel mainWinViewModel = new MainWinViewModel();
         public MainWindow()
         {
             InitializeComponent();
-            
-            this.DataContext = mainWinViewModel;
+
+            this.DataContext = new MainWinViewModel();
 
         }
 
@@ -48,9 +47,48 @@ namespace TabsHolder
             ((MainWinViewModel)DataContext).LoadConfig();
         }
 
-        private void Window_Closing(object sender, CancelEventArgs e)
+        public void SaveSessionAs_Click(object sender, EventArgs e)
         {
+            Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
+            dlg.FileName = $"Session_{DateTime.Now.ToString("ddmmhhmmss")}"; // Default file name
+            dlg.DefaultExt = ".ses"; // Default file extension
+            dlg.Filter = "Session files (.ses)|*.ses"; // Filter files by extension
+            dlg.InitialDirectory = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
 
+            Nullable<bool> result = dlg.ShowDialog();
+
+            if (result == true)
+            {
+                ((MainWinViewModel)DataContext).SaveSession(dlg.FileName);
+            }
+            else
+            {
+                string message = "Please select file next time";
+                string caption = "Info";
+                MessageBoxButton buttons = MessageBoxButton.OK;
+                MessageBoxImage icon = MessageBoxImage.Warning;
+                MessageBox.Show(message, caption, buttons, icon);
+            }
+        }
+
+        public void LoadSession_Click(object senser, EventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Multiselect = false;
+            openFileDialog.Filter = "Session files (.ses)|*.ses"; // Filter files by extension
+            openFileDialog.InitialDirectory = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+            if (openFileDialog.ShowDialog() == true)
+            {
+                ((MainWinViewModel)DataContext).LoadSession(openFileDialog.FileNames[0]);
+            }
+            else
+            {
+                string message = "Please select file next time";
+                string caption = "Info";
+                MessageBoxButton buttons = MessageBoxButton.OK;
+                MessageBoxImage icon = MessageBoxImage.Warning;
+                MessageBox.Show(message, caption, buttons, icon);
+            }
         }
     }
 }

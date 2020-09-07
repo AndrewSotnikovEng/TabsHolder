@@ -48,7 +48,7 @@ namespace TabsHolder
         {
 
             db = new ApplicationContext();
-            loadDbModels();
+            LoadDbModels();
             tabItemsView = CollectionViewSource.GetDefaultView(TabItems);
             tabItemsView.Filter = o => String.IsNullOrEmpty(FilterWord) ? 
                     true : Regex.IsMatch(((TabItem)o).Title, $"{FilterWord}", RegexOptions.IgnoreCase);
@@ -58,7 +58,6 @@ namespace TabsHolder
             OpenAboutWindowCmd = new RelayCommand(o => { OpenAboutWindow(); });
             AddBtnClickCmd = new RelayCommand(o => { AddBtnСlick(); });
             SaveConfigCmd = new RelayCommand(o => { SaveConfig(); });
-            SaveSessionCmd = new RelayCommand(o => { SaveSession(); });
 
             //LoadSessionCmd = new RelayCommand(o => { LoadSession(); });
 
@@ -103,12 +102,12 @@ namespace TabsHolder
             }
 
         set {
-                toggleCheckBoxes(value);
+                ToggleCheckBoxes(value);
                 Console.WriteLine("Do something");
             } 
         }
 
-        private void toggleCheckBoxes(bool isChecked)
+        private void ToggleCheckBoxes(bool isChecked)
         {
             ObservableCollection<TabItem> tmpTabItems = new ObservableCollection<TabItem>();
             foreach (TabItem item in TabItems)
@@ -128,7 +127,7 @@ namespace TabsHolder
             }
         }
 
-        public void loadDbModels()
+        public void LoadDbModels()
         {
             db.tabItems.Load();
             var someList = db.tabItems.Local.ToBindingList();
@@ -149,7 +148,7 @@ namespace TabsHolder
                 {
                     db.tabItems.Remove(TabItems.ElementAt(i));
                     db.SaveChanges();
-                    loadDbModels();
+                    LoadDbModels();
                 }
             }
         }
@@ -169,31 +168,22 @@ namespace TabsHolder
             browserPath = ses.browserPath;
         }
 
-
-        public void SaveSession()
+        public void LoadSession(string fileName)
         {
-            // Configure save file dialog box
-            Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
-            dlg.FileName = $"Session_{DateTime.Now.ToString("ddmmhhmmss")}"; // Default file name
-            dlg.DefaultExt = ".ses"; // Default file extension
-            dlg.Filter = "Session files (.ses)|*.ses"; // Filter files by extension
-            dlg.InitialDirectory = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+            if (!File.Exists(fileName)) return;
+            Session ses = XmlSerializerService.Deserialize(fileName);
+            browserPath = ses.browserPath;
+            TabItems = ses.TabItems;
+        }
 
-            // Show save file dialog box
-            Nullable<bool> result = dlg.ShowDialog();
 
-            // Process save file dialog box results
-            if (result == true)
-            {
-                // Save document
-                string filename = dlg.FileName;
+        public void SaveSession(string fileName)
+        {
                 Session ses = new Session();
                 ses.browserPath = browserPath;
                 ses.TabItems = TabItems;
                 
-                XmlSerializerService.Serialize(filename, ses);
-            }
-
+                XmlSerializerService.Serialize(fileName, ses);
         }
 
         public void SaveConfig()
@@ -240,14 +230,6 @@ namespace TabsHolder
             private set;
         }
 
-
-
-
-        public RelayCommand LoadSessionCmd
-        {
-            get;
-            private set;
-        }
 
         private void OpenInFirefox()
         {
@@ -306,7 +288,7 @@ namespace TabsHolder
                 TabItem tabItem = (TabItem)data;
                 db.tabItems.Add(tabItem);
                 db.SaveChanges();
-                loadDbModels();
+                LoadDbModels();
                 InitialTabItems = TabItems;
             }
         }

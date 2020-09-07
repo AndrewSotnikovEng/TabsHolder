@@ -28,8 +28,8 @@
     <StackPanel x:Name="ParentElem" Orientation="Vertical">
         <Menu>
             <MenuItem Header="File">
-                <MenuItem Header="Load Session" />
-                <MenuItem Header="Save Session" Command="{Binding SaveSessionCmd}"/>
+                <MenuItem Header="Load Session" Click="LoadSession_Click" />
+                <MenuItem Header="Save Session" Click="SaveSessionAs_Click"/>
                 <Separator/>
                 <MenuItem Header="Exit" Click="MainWindowClose" />
             </MenuItem>
