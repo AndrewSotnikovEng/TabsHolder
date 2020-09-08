@@ -26,6 +26,8 @@ namespace TabsHolder
         private string filterWord;
         private bool checkAll;
         private ICollectionView tabItemsView;
+        private bool isSessionLoaded = false;
+
         private string browserPath = @"C:\Program Files\Mozilla Firefox\firefox.exe";
 
         private TabItem selectedItem;
@@ -53,17 +55,30 @@ namespace TabsHolder
             tabItemsView.Filter = o => String.IsNullOrEmpty(FilterWord) ? 
                     true : Regex.IsMatch(((TabItem)o).Title, $"{FilterWord}", RegexOptions.IgnoreCase);
 
-            DeleteTabItemCmd = new RelayCommand(o => { DeleteTabItem(); });
+            DeleteTabItemCmd = new RelayCommand(o => { DeleteTabItem(); }, DeleteTabItemCanExecute );
             OpenInFirefoxCmd = new RelayCommand(o => { OpenInFirefox(); });
             OpenAboutWindowCmd = new RelayCommand(o => { OpenAboutWindow(); });
-            AddBtnClickCmd = new RelayCommand(o => { AddBtnСlick(); });
+            AddBtnClickCmd = new RelayCommand(o => { AddBtnСlick(); }, AddBtnClickCanExecute);
             SaveConfigCmd = new RelayCommand(o => { SaveConfig(); });
-
-            //LoadSessionCmd = new RelayCommand(o => { LoadSession(); });
+            UnloadSessionCmd = new RelayCommand(o => { UnloadSession(); }, UnloadSessionCanExecute);
 
             MessengerStatic.CloseAddTabWindow += AddTabClosing;
 
             
+        }
+
+        private bool DeleteTabItemCanExecute(object arg)
+        {
+            bool result = IsSessionLoaded ? false : true;
+
+            return result;
+        }
+
+        private bool AddBtnClickCanExecute(object arg)
+        {
+            bool result = IsSessionLoaded ? false : true;
+
+            return result;
         }
 
         public ObservableCollection<TabItem> TabItems
@@ -160,6 +175,8 @@ namespace TabsHolder
             MessengerStatic.Bus += Receive;
         }
 
+
+
         public void LoadConfig()
         {
             string configFileName = "config.ses";
@@ -174,6 +191,8 @@ namespace TabsHolder
             Session ses = XmlSerializerService.Deserialize(fileName);
             browserPath = ses.browserPath;
             TabItems = ses.TabItems;
+
+            IsSessionLoaded = true;
         }
 
 
@@ -184,6 +203,12 @@ namespace TabsHolder
                 ses.TabItems = TabItems;
                 
                 XmlSerializerService.Serialize(fileName, ses);
+        }
+
+        public void UnloadSession()
+        {
+            LoadDbModels();
+            IsSessionLoaded = false;
         }
 
         public void SaveConfig()
@@ -229,6 +254,16 @@ namespace TabsHolder
             get;
             private set;
         }
+
+
+
+        public RelayCommand UnloadSessionCmd
+        {
+            get;
+            private set;
+        }
+        public bool IsSessionLoaded { get => isSessionLoaded; set => isSessionLoaded = value; }
+        public bool IsSessionLoaded1 { get => isSessionLoaded; set => isSessionLoaded = value; }
 
 
         private void OpenInFirefox()
@@ -296,6 +331,15 @@ namespace TabsHolder
         private void AddTabClosing(object data)
         {
             MessengerStatic.Bus -= Receive;
+        }
+
+
+        private bool UnloadSessionCanExecute(object arg)
+        {
+
+            bool result = IsSessionLoaded ? true : false;
+
+            return result;
         }
     }
 }
