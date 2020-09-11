@@ -27,7 +27,7 @@ namespace TabsHolder.Services
             var myFileStream = new FileStream(filePath, FileMode.Open);
             // Call the Deserialize method and cast to the object type.
             var ses = (Session)mySerializer.Deserialize(myFileStream);
-
+            myFileStream.Close();
 
             return ses;
         }

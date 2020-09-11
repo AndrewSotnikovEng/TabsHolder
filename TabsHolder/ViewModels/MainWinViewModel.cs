@@ -51,11 +51,9 @@ namespace TabsHolder
 
             db = new ApplicationContext();
             LoadDbModels();
-            tabItemsView = CollectionViewSource.GetDefaultView(TabItems);
-            tabItemsView.Filter = o => String.IsNullOrEmpty(FilterWord) ? 
-                    true : Regex.IsMatch(((TabItem)o).Title, $"{FilterWord}", RegexOptions.IgnoreCase);
+            WireFilter();
 
-            DeleteTabItemCmd = new RelayCommand(o => { DeleteTabItem(); }, DeleteTabItemCanExecute );
+            DeleteTabItemCmd = new RelayCommand(o => { DeleteTabItem(); }, DeleteTabItemCanExecute);
             OpenInFirefoxCmd = new RelayCommand(o => { OpenInFirefox(); });
             OpenAboutWindowCmd = new RelayCommand(o => { OpenAboutWindow(); });
             AddBtnClickCmd = new RelayCommand(o => { AddBtnСlick(); }, AddBtnClickCanExecute);
@@ -64,7 +62,14 @@ namespace TabsHolder
 
             MessengerStatic.CloseAddTabWindow += AddTabClosing;
 
-            
+
+        }
+
+        private void WireFilter()
+        {
+            tabItemsView = CollectionViewSource.GetDefaultView(TabItems);
+            tabItemsView.Filter = o => String.IsNullOrEmpty(FilterWord) ?
+                    true : Regex.IsMatch(((TabItem)o).Title, $"{FilterWord}", RegexOptions.IgnoreCase);
         }
 
         private bool DeleteTabItemCanExecute(object arg)
@@ -193,6 +198,8 @@ namespace TabsHolder
             TabItems = ses.TabItems;
 
             IsSessionLoaded = true;
+
+            WireFilter();
         }
 
 
@@ -209,6 +216,7 @@ namespace TabsHolder
         {
             LoadDbModels();
             IsSessionLoaded = false;
+            WireFilter();
         }
 
         public void SaveConfig()
@@ -249,12 +257,6 @@ namespace TabsHolder
             private set;
         }
 
-        public RelayCommand SaveSessionCmd
-        {
-            get;
-            private set;
-        }
-
 
 
         public RelayCommand UnloadSessionCmd
@@ -263,7 +265,6 @@ namespace TabsHolder
             private set;
         }
         public bool IsSessionLoaded { get => isSessionLoaded; set => isSessionLoaded = value; }
-        public bool IsSessionLoaded1 { get => isSessionLoaded; set => isSessionLoaded = value; }
 
 
         private void OpenInFirefox()
