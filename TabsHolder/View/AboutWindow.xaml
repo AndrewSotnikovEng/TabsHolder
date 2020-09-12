@@ -18,7 +18,8 @@
     
     <Grid>
         <StackPanel>
-            <TextBlock Style="{StaticResource TextBlock}" Width="600" FontSize="30" Margin="100,80,0,0"> Keep everything you want, near to you :)</TextBlock>
+            <TextBlock Style="{StaticResource TextBlock}" Width="600" FontSize="30" Margin="100,40,0,0"> Keep favorite tabs near to you :)</TextBlock>
+
             <StackPanel>
                 <Grid Margin="100, 80" HorizontalAlignment="Left" VerticalAlignment="Top">
                     <Grid.ColumnDefinitions>
@@ -26,13 +27,16 @@
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="100"/>
                         <RowDefinition Height="50"/>
                         <RowDefinition Height="50"/>
                     </Grid.RowDefinitions>
-                    <TextBlock Style="{StaticResource TextBlock}"  Grid.Row="0" Grid.Column="0" Grid.RowSpan="2">Author:</TextBlock>
-                    <TextBlock Style="{StaticResource TextBlock}" Grid.Row="0" Grid.Column="1">Andrew Sotnikov</TextBlock>
-                    <TextBlock Style="{StaticResource TextBlock}" Grid.Row="1" Grid.Column="0">E-mail:</TextBlock>
-                    <TextBlock Style="{StaticResource TextBlock}" Grid.Row="1" Grid.Column="1">andrew.sotnikov@zoho.com</TextBlock>
+                    <TextBlock Style="{StaticResource TextBlock}"  Grid.Row="0" Grid.Column="0" Grid.RowSpan="2">version:</TextBlock>
+                    <TextBlock Style="{StaticResource TextBlock}" Grid.Row="0" Grid.Column="1">1.02</TextBlock>
+                    <TextBlock Style="{StaticResource TextBlock}"  Grid.Row="1" Grid.Column="0" Grid.RowSpan="2">Author:</TextBlock>
+                    <TextBlock Style="{StaticResource TextBlock}" Grid.Row="1" Grid.Column="1">Andrew Sotnikov</TextBlock>
+                    <TextBlock Style="{StaticResource TextBlock}" Grid.Row="2" Grid.Column="0" Grid.RowSpan="2">E-mail:</TextBlock>
+                    <TextBlock Style="{StaticResource TextBlock}" Grid.Row="2" Grid.Column="1">andrew.sotnikov@zoho.com</TextBlock>
                 </Grid>
             </StackPanel>
         </StackPanel>

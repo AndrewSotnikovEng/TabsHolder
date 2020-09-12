@@ -17,6 +17,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TabsHolder.ViewModels;
 
 namespace TabsHolder
 {
@@ -29,6 +30,9 @@ namespace TabsHolder
             InitializeComponent();
 
             this.DataContext = new MainWinViewModel();
+            MessengerStatic.AddTabWindowOpened += CreateAddTabWindow;
+            MessengerStatic.RenameTabWindowOpened += CreateRenameTabWin;
+
 
         }
 
@@ -90,5 +94,20 @@ namespace TabsHolder
                 MessageBox.Show(message, caption, buttons, icon);
             }
         }
+
+        public void CreateAddTabWindow(object data)
+        {
+
+            AddTabWindow addTabWin = new AddTabWindow();
+            addTabWin.Show();
+        }
+
+        public void CreateRenameTabWin(object selectedItem)
+        {
+            RenameTabWindow renameTabWindow = new RenameTabWindow();
+            ((RenameTabViewModel)renameTabWindow.DataContext).SelectedTabItem = (TabItem)selectedItem;
+            renameTabWindow.Show();
+        }
+
     }
 }

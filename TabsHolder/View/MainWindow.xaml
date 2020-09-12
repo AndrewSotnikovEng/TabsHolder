@@ -44,8 +44,8 @@
             <CheckBox IsChecked="{Binding CheckAll, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}" Margin="200,0,0,0" />
         </StackPanel>
     <StackPanel Orientation="Horizontal" VerticalAlignment="Top">
-            <DataGrid x:Name="tabItemsList"  ItemsSource="{Binding TabItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False" Margin="85,0" HorizontalAlignment="Left"
-                  Width="737" Height="500" CanUserAddRows="False" SelectedItem="{Binding SelectedItem}">
+            <DataGrid x:Name="tabItemsList"  ItemsSource="{Binding TabItems, Mode=TwoWay}" AutoGenerateColumns="False" Margin="85,0" HorizontalAlignment="Left"
+                  Width="737" Height="500" CanUserAddRows="False" SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Title" Width="620" Binding="{Binding Path=Title}" FontSize="14" />
                     <DataGridTextColumn Header="Rating" Width="50" Binding="{Binding Path=Rating}" FontSize="14"/>
@@ -63,6 +63,7 @@
             <StackPanel Orientation="Vertical">
                 <Button Name="AddBtn" Style="{StaticResource Button}" Command="{Binding AddBtnClickCmd}" >Add</Button>
                 <Button Name="DeleteBtn" Style="{StaticResource Button}" Command="{Binding DeleteTabItemCmd}" >Delete</Button>
+                <Button Name="RenameBtn" Style="{StaticResource Button}" Command="{Binding RenameTabItemCmd}" >Rename</Button>
                 <Button Name="Open" Style="{StaticResource Button}" Margin="0,100,0,0" Command="{Binding OpenInFirefoxCmd}" >Open</Button>
             </StackPanel>
         </StackPanel>
