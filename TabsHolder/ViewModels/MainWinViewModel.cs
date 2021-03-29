@@ -16,6 +16,7 @@ using TabsHolder.ViewModels;
 using TabsHolder.View;
 using TabsHolder.Services;
 using TabsHolder.Data;
+using System.Windows;
 
 namespace TabsHolder
 {
@@ -53,6 +54,7 @@ namespace TabsHolder
                 {
                     this.selectedItem = value;
                     this.OnPropertyChanged("SelectedItem");
+                    Clipboard.SetDataObject(selectedItem.Url);
                 }
             }
         }
