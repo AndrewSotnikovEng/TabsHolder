@@ -29,6 +29,7 @@ namespace TabsHolder
         private string browserPath = @"C:\Program Files\Mozilla Firefox\firefox.exe";
 
         private TabItem selectedItem;
+        public string CurrentSesstion { get; set; }
 
         public ObservableCollection<TabItem> TabItems
         {
@@ -70,17 +71,33 @@ namespace TabsHolder
             RenameTabItemCmd = new RelayCommand(o => { RenameBtnСlick(); }, RenameBtnClickCanExecute);
             SaveConfigCmd = new RelayCommand(o => { SaveConfig(); });
             UnloadSessionCmd = new RelayCommand(o => { UnloadSession(); }, UnloadSessionCanExecute);
+            OverwriteSessionCmd = new RelayCommand(o => { OverwriteSession(); }, OverwriteSessionCanExecute);
+            
 
             MessengerStatic.AddTabWindowClosed += AddTabClosing;
             MessengerStatic.TabItemNameChanged += SelectedItemChanged;
 
         }
 
+        private void OverwriteSession()
+        {
+            SaveSession(CurrentSesstion);
+        }
+
+        private bool OverwriteSessionCanExecute(object arg)
+        {
+            bool result = IsSessionLoaded ? true : false;
+
+            return result;
+        }
+
         private void SelectedItemChanged(object obj)
         {
-            //SelectedItem = (TabItem)obj;
-            tabItemsView.Refresh();
-            db.SaveChanges();
+            if (!IsSessionLoaded)
+            {
+                tabItemsView.Refresh();
+                db.SaveChanges();
+            }
         }
 
         public RelayCommand RenameTabItemCmd
@@ -95,9 +112,9 @@ namespace TabsHolder
 
         private bool RenameBtnClickCanExecute(object arg)
         {
-            bool result = IsSessionLoaded ? false : true;
+            //bool result = IsSessionLoaded ? false : true;
 
-            return result;
+            return true;
         }
 
 
@@ -120,17 +137,24 @@ namespace TabsHolder
                 if (SelectedItem == null) break;
                 if (TabItems.ElementAt(i).Title == SelectedItem.Title)
                 {
-                    db.tabItems.Remove(TabItems.ElementAt(i));
-                    db.SaveChanges();
-                    LoadDbModels();
+                    if (!IsSessionLoaded) //for database
+                    {
+                        db.tabItems.Remove(TabItems.ElementAt(i));
+                        db.SaveChanges();
+                        LoadDbModels();
+                    } else //for xml file
+                    {
+                        TabItems.Remove(TabItems.ElementAt(i));
+                    }
                 }
             }
+
         }
         private bool DeleteTabItemCanExecute(object arg)
         {
-            bool result = IsSessionLoaded ? false : true;
+            //bool result = IsSessionLoaded ? false : true;
 
-            return result;
+            return true;
         }
 
         public RelayCommand AddBtnClickCmd
@@ -146,9 +170,9 @@ namespace TabsHolder
 
         private bool AddBtnClickCanExecute(object arg)
         {
-            bool result = IsSessionLoaded ? false : true;
+            //bool result = IsSessionLoaded ? false : true;
 
-            return result;
+            return true;
         }
 
         public string FilterWord
@@ -223,6 +247,7 @@ namespace TabsHolder
 
         public void LoadSession(string fileName)
         {
+            CurrentSesstion = fileName;
             if (!File.Exists(fileName)) return;
             Session ses = XmlSerializerService.Deserialize(fileName);
             browserPath = ses.browserPath;
@@ -247,6 +272,8 @@ namespace TabsHolder
             get;
             private set;
         }
+        public RelayCommand OverwriteSessionCmd { get; }
+
         public void UnloadSession()
         {
             LoadDbModels();
@@ -340,10 +367,17 @@ namespace TabsHolder
             if (data is TabItem)
             {
                 TabItem tabItem = (TabItem)data;
-                db.tabItems.Add(tabItem);
-                db.SaveChanges();
-                LoadDbModels();
-                InitialTabItems = TabItems;
+                if (!IsSessionLoaded) //for database
+                {
+                    db.tabItems.Add(tabItem);
+                    db.SaveChanges();
+                    LoadDbModels();
+                    InitialTabItems = TabItems;
+                } else //for xml
+                {
+                    TabItems.Add(tabItem);
+                }
+
             }
         }
 

@@ -30,6 +30,7 @@
             <MenuItem Header="File">
                 <MenuItem Header="Load Session" Click="LoadSession_Click" />
                 <MenuItem Header="Save Session" Click="SaveSessionAs_Click"/>
+                <MenuItem Header="Overwrite Session" Command="{Binding OverwriteSessionCmd}" />
                 <MenuItem Header="Unload Session" Command="{Binding UnloadSessionCmd}" />
                 <Separator/>
                 <MenuItem Header="Exit" Click="MainWindowClose" />
