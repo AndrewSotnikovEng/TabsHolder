@@ -79,8 +79,26 @@ namespace TabsHolder
 
         public void CreateSession_Click(object sender, EventArgs e)
         {
-            SaveSessionAs_Click(null, null);
-            MessengerStatic.NotifySessionCreating(null, null);
+            Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
+            dlg.FileName = $"Session_{DateTime.Now.ToString("ddmmhhmmss")}"; // Default file name
+            dlg.DefaultExt = ".ses"; // Default file extension
+            dlg.Filter = "Session files (.ses)|*.ses"; // Filter files by extension
+            dlg.InitialDirectory = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+
+            Nullable<bool> result = dlg.ShowDialog();
+
+            if (result == true)
+            {
+                ((MainWinViewModel)DataContext).CreateSession(dlg.FileName);
+            }
+            else
+            {
+                string message = "Please select file next time";
+                string caption = "Info";
+                MessageBoxButton buttons = MessageBoxButton.OK;
+                MessageBoxImage icon = MessageBoxImage.Warning;
+                MessageBox.Show(message, caption, buttons, icon);
+            }
         }
 
 

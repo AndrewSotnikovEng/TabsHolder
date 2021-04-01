@@ -90,11 +90,13 @@ namespace TabsHolder
 
         }
 
-        private void CreateEmptySession()
+        public void CreateSession(string fileName)
         {
-            Session ses = new Session();
-            ses.TabItems = new ObservableCollection<TabItem>();
-            ses.browserPath = browserPath;
+            TabItems.Clear();
+            SaveSession(fileName);
+            LoadSession(fileName);
+
+
         }
 
 
@@ -180,7 +182,7 @@ namespace TabsHolder
             private set;
         }
 
-        public RelayCommand CreateSessionCmd { get; set; } 
+        
         private void AddBtnСlick()
         {
             MessengerStatic.NotifyAddTabWindowOpenning();
