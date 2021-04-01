@@ -49,6 +49,19 @@ namespace TabsHolder
         }
 
 
+        public static event Action<object> SessionOverwrited;
+        internal static void NotifySessionOverwriting(object data)
+        {
+            SessionOverwrited?.Invoke(null);
+        }
+
+
+        public static event Action<object> SessionCreated;
+        internal static void NotifySessionCreating(object fileName, EventArgs e)
+        {
+            SessionCreated?.Invoke(fileName);
+        }
+
     }
 }
 

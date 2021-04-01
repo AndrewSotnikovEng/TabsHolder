@@ -33,11 +33,37 @@ namespace TabsHolder
             MessengerStatic.AddTabWindowOpened += CreateAddTabWindow;
             MessengerStatic.RenameTabWindowOpened += CreateRenameTabWin;
 
+            Closing += MainWindow_Closing;
+
+
 
         }
 
+
+        private void MainWindow_Closing(object sender, CancelEventArgs e)
+        {
+            if (((MainWinViewModel)DataContext).IsSessionChanged())
+            {
+                var result = MessageBox.Show("Session was changed, do you want to save it?", "Session changed", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if (result == MessageBoxResult.Yes)
+                {
+                    MessengerStatic.NotifySessionOverwriting(null);
+                }
+            }
+        }
+
+        //to replace
         void MainWindowClose(object sender, RoutedEventArgs e)
         {
+            if (((MainWinViewModel)DataContext).IsSessionChanged())
+            {
+                var result = MessageBox.Show("Session was changed, do you want to save it?", "Session changed", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if (result == MessageBoxResult.Yes)
+                {
+                    MessengerStatic.NotifySessionOverwriting(null);
+                }
+            }
+
             this.Close();
         }
 
@@ -50,6 +76,13 @@ namespace TabsHolder
         {
             ((MainWinViewModel)DataContext).LoadConfig();
         }
+
+        public void CreateSession_Click(object sender, EventArgs e)
+        {
+            SaveSessionAs_Click(null, null);
+            MessengerStatic.NotifySessionCreating(null, null);
+        }
+
 
         public void SaveSessionAs_Click(object sender, EventArgs e)
         {
@@ -74,6 +107,7 @@ namespace TabsHolder
                 MessageBox.Show(message, caption, buttons, icon);
             }
         }
+
 
         public void LoadSession_Click(object senser, EventArgs e)
         {

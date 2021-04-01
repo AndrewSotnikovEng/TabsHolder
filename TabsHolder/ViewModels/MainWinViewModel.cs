@@ -30,7 +30,12 @@ namespace TabsHolder
         private string browserPath = @"C:\Program Files\Mozilla Firefox\firefox.exe";
 
         private TabItem selectedItem;
-        public string CurrentSesstion { get; set; }
+        public string CurrentSessionName { get; set; }
+
+        public Session InitialSession { get; set; }
+        public Session CurrentSession { get; set; }
+
+        public string recentlySavedSession;
 
         public ObservableCollection<TabItem> TabItems
         {
@@ -47,14 +52,17 @@ namespace TabsHolder
 
         public TabItem SelectedItem
         {
-            get { return this.selectedItem; }
+            get { return selectedItem; }
             set
             {
-                if (value != this.selectedItem)
+                if (value != selectedItem)
                 {
-                    this.selectedItem = value;
-                    this.OnPropertyChanged("SelectedItem");
-                    Clipboard.SetDataObject(selectedItem.Url);
+                    selectedItem = value;
+                    OnPropertyChanged("SelectedItem");
+                    if (selectedItem != null)
+                    {
+                        Clipboard.SetDataObject(selectedItem.Url);
+                    }
                 }
             }
         }
@@ -78,12 +86,21 @@ namespace TabsHolder
 
             MessengerStatic.AddTabWindowClosed += AddTabClosing;
             MessengerStatic.TabItemNameChanged += SelectedItemChanged;
+            MessengerStatic.SessionOverwrited += (obj) => OverwriteSession();
 
         }
 
+        private void CreateEmptySession()
+        {
+            Session ses = new Session();
+            ses.TabItems = new ObservableCollection<TabItem>();
+            ses.browserPath = browserPath;
+        }
+
+
         private void OverwriteSession()
         {
-            SaveSession(CurrentSesstion);
+            SaveSession(CurrentSessionName);
         }
 
         private bool OverwriteSessionCanExecute(object arg)
@@ -95,11 +112,9 @@ namespace TabsHolder
 
         private void SelectedItemChanged(object obj)
         {
-            if (!IsSessionLoaded)
-            {
-                tabItemsView.Refresh();
-                db.SaveChanges();
-            }
+            tabItemsView.Refresh();
+            db.SaveChanges();
+
         }
 
         public RelayCommand RenameTabItemCmd
@@ -164,6 +179,8 @@ namespace TabsHolder
             get;
             private set;
         }
+
+        public RelayCommand CreateSessionCmd { get; set; } 
         private void AddBtnСlick()
         {
             MessengerStatic.NotifyAddTabWindowOpenning();
@@ -249,24 +266,25 @@ namespace TabsHolder
 
         public void LoadSession(string fileName)
         {
-            CurrentSesstion = fileName;
+            CurrentSessionName = fileName;
             if (!File.Exists(fileName)) return;
-            Session ses = XmlSerializerService.Deserialize(fileName);
-            browserPath = ses.browserPath;
-            TabItems = ses.TabItems;
+            CurrentSession = XmlSerializerService.Deserialize(fileName);
+            browserPath = CurrentSession.browserPath;
+            TabItems = CurrentSession.TabItems;
 
             IsSessionLoaded = true;
+            InitialSession = new Session(CurrentSession);
 
             WireFilter();
         }
 
         public void SaveSession(string fileName)
         {
-                Session ses = new Session();
-                ses.browserPath = browserPath;
-                ses.TabItems = TabItems;
+                CurrentSession= new Session();
+                CurrentSession.browserPath = browserPath;
+                CurrentSession.TabItems = TabItems;
                 
-                XmlSerializerService.Serialize(fileName, ses);
+                XmlSerializerService.Serialize(fileName, CurrentSession);
         }
 
         public RelayCommand UnloadSessionCmd
@@ -386,6 +404,15 @@ namespace TabsHolder
         private void AddTabClosing(object data)
         {
             MessengerStatic.TabItemAdded -= AddTabItem;
+        }
+
+        public bool IsSessionChanged()
+        {
+            bool result = false;
+            result = (!CurrentSession.Equals(InitialSession)) ? true : false;
+
+            return result;
+
         }
 
 

@@ -21,8 +21,18 @@ namespace TabsHolder
             this.Rating = rating;
             this.IsChecked = isChecked;
             this.Title = TabItemService.getUrlTitle(Url);
-
         }
+
+
+        //more faster version, no need parsing
+        public TabItem(string url, int rating, int isChecked, string title)
+        {
+            this.Url = url;
+            this.Rating = rating;
+            this.IsChecked = isChecked;
+            this.Title = title;
+        }
+
 
         public TabItem()
         {
@@ -52,5 +62,20 @@ namespace TabsHolder
             }
         }
 
+        public override bool Equals(object obj)
+        {
+            bool result = false;
+            try
+            {
+                TabItem objToCompare = (TabItem)obj;
+                if (Title == objToCompare.Title && Url == objToCompare.Url && Rating == objToCompare.Rating)
+                {
+                    result = true;
+                }
+            } catch (InvalidCastException e) { }
+            
+
+            return result;
+        }
     }
 }
