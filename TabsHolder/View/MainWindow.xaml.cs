@@ -55,15 +55,6 @@ namespace TabsHolder
         //to replace
         void MainWindowClose(object sender, RoutedEventArgs e)
         {
-            if (((MainWinViewModel)DataContext).IsSessionChanged())
-            {
-                var result = MessageBox.Show("Session was changed, do you want to save it?", "Session changed", MessageBoxButton.YesNo, MessageBoxImage.Question);
-                if (result == MessageBoxResult.Yes)
-                {
-                    MessengerStatic.NotifySessionOverwriting(null);
-                }
-            }
-
             this.Close();
         }
 

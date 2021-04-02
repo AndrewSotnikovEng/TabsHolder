@@ -411,6 +411,10 @@ namespace TabsHolder
         public bool IsSessionChanged()
         {
             bool result = false;
+            if (CurrentSession == null || InitialSession == null)
+            {
+                return false;
+            }
             result = (!CurrentSession.Equals(InitialSession)) ? true : false;
 
             return result;
