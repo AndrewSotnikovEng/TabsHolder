@@ -95,8 +95,6 @@ namespace TabsHolder
             TabItems.Clear();
             SaveSession(fileName);
             LoadSession(fileName);
-
-
         }
 
 
@@ -268,6 +266,11 @@ namespace TabsHolder
 
         public void LoadSession(string fileName)
         {
+            if (IsSessionChanged())
+            {
+                MessengerStatic.NotifySessionOverwriting(null);
+            }
+
             CurrentSessionName = fileName;
             if (!File.Exists(fileName)) return;
             CurrentSession = XmlSerializerService.Deserialize(fileName);
