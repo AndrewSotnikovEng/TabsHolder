@@ -23,15 +23,15 @@ namespace Installer
     {
         public MainWindow()
         {
-            Builds.Add(new Build("v0.1.0", "url1"));
-            Builds.Add(new Build("v1.1", "url2"));
-
             InitializeComponent();
-            DataContext = this;
+            DataContext = new MainWindowViewModel();
 
 
         }
 
-        public ObservableCollection<Build> Builds { get; set; } = new ObservableCollection<Build>();
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            ((MainWindowViewModel)DataContext).Execute();
+        }
     }
 }
