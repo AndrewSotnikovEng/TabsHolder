@@ -17,7 +17,7 @@
             <Setter Property="Button.FontSize" Value="14"/>
             <Setter Property="Button.Width" Value="60"/>
             <Setter Property="Button.Height" Value="25"/>
-            <Setter Property="Button.Margin" Value="20,20,0,0" />
+            <Setter Property="Button.Margin" Value="20,20,0,0"/>
         </Style>
         <Style x:Key="ComboItem">
             <Setter Property="Button.Margin" Value="0,5,0,5" />
@@ -48,10 +48,10 @@
 
         </StackPanel>
         <StackPanel Orientation="Vertical" Margin="20" Height="200">
-            <TextBlock Style="{StaticResource ComboItem}">Downloading</TextBlock>
-            <TextBlock Style="{StaticResource ComboItem}">Building</TextBlock>
-            <TextBlock Style="{StaticResource ComboItem}">Cleaning cashes</TextBlock>
-            <TextBlock Style="{StaticResource ComboItem}">Complete</TextBlock>
+            <TextBlock Style="{StaticResource ComboItem}" Visibility="{Binding DownloadingStageVisibility}">Downloading</TextBlock>
+            <TextBlock Style="{StaticResource ComboItem}" Visibility="{Binding ExtractingStageVisibility}">Extracting</TextBlock>
+            <TextBlock Style="{StaticResource ComboItem}" Visibility="{Binding CleaningStageVisibility}">Cleaning cashes</TextBlock>
+            <TextBlock Style="{StaticResource ComboItem}" Visibility="{Binding DoneStageVisibility}">Done! :)</TextBlock>
         </StackPanel>
         <StackPanel Style="{StaticResource BottomButtonsContainer}">
             <Button Style="{StaticResource Button}" Content="OK" Command="{Binding RunInstallationCmd}" Click="Button_Click"/>

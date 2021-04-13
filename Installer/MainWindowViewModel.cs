@@ -13,15 +13,16 @@ using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
 using Microsoft.Build.Evaluation;
 using Microsoft.Build.Logging;
+using Installer.ViewModels;
 
 namespace Installer
 {
-    class MainWindowViewModel
+    class MainWindowViewModel : ViewModelBase
     {
         public MainWindowViewModel()
         {
             Builds.Add(new Build("v0.1.0", "url1"));
-            Builds.Add(new Build("v1.1", "https://github.com/AndrewSotnikovEng/TabsHolder/archive/refs/tags/v1.1.zip"));
+            Builds.Add(new Build("v1.1", "https://github.com/AndrewSotnikovEng/TabsHolder/releases/download/v1.1/TabsHolder.zip"));
         }
 
 
@@ -29,47 +30,102 @@ namespace Installer
         {
 
         }
+
+        public string DownloadingStageColor { get; set; }
+        public string ExtractingStageColor { get; set; }
+        public string CleaningStageColor { get; set; }
+        public string DoneStageColor { get; set; }
+
+        public string DownloadingStageVisibility { get => downloadingStageVisibility; set
+            {
+                downloadingStageVisibility = value; 
+                OnPropertyChanged("DownloadingStageVisibility");
+            }
+        }
+        public string ExtractingStageVisibility { get => extractingStageVisibility; set
+            {
+                extractingStageVisibility = value;
+                OnPropertyChanged("ExtractingStageVisibility");
+            }
+        }
+        public string CleaningStageVisibility { get => cleaningStageVisibility; set
+            {
+                cleaningStageVisibility = value;
+                OnPropertyChanged("CleaningStageVisibility");
+            }
+        }
+        public string DoneStageVisibility { get => doneStageVisibility; set
+            {
+                doneStageVisibility = value;
+                OnPropertyChanged("DoneStageVisibility");
+            }
+        }
+
         public String OutputFolder { get; set; }
 
+        public String OutputPath { get; set; }
+
         Build selectedItem;
-        public Build  SelectedItem { get { return selectedItem; }
+        
+        private string downloadingStageVisibility = "Hidden";
+        private string extractingStageVisibility = "Hidden";
+        private string cleaningStageVisibility = "Hidden";
+        private string doneStageVisibility = "Hidden";
+
+        public Build SelectedItem
+        {
+            get { return selectedItem; }
             set
             {
                 selectedItem = value;
             }
         }
-                
-        
+
+
 
         public void Execute()
         {
-            //Download();
-            //ExtractToDir();
-            Compile();
+            PrepareDestination();
+            Download();
+            ExtractToDir();
+            //Compile();
+            RemoveTrash();
 
+        }
+
+        private void PrepareDestination()
+        {
+            string previousFolder = Path.Combine(OutputFolder, "TabsHolder");
+            if (Directory.Exists(previousFolder))
+            {
+                Directory.Delete(previousFolder, true);
+            }  
+            
         }
 
         private void Download()
         {
-            string outputPath = OutputFolder + @"\output.zip";
+            OutputPath = OutputFolder + @"\output.zip";
             ServicePointManager.Expect100Continue = true;
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
             WebClient cln = new WebClient();
-            cln.DownloadFile(SelectedItem.Url, outputPath);
+            cln.DownloadFile(SelectedItem.Url, OutputPath);
+            DownloadingStageVisibility = "Visible";
         }
 
         void ExtractToDir()
         {
             string outputPath = OutputFolder + @"\output.zip";
             ZipFile.ExtractToDirectory(outputPath, OutputFolder);
+            ExtractingStageVisibility = "Visible";
         }
 
         void Compile()
         {
             //string msbuild = @"C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\MSBuild\Current\Bin\amd64\MSBuild.exe ";
             string msbuild = @"C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\MSBuild\Current\Bin\amd64\MSBuild.exe ";
-            string projectNmae = OutputFolder + @"\TabsHolder-1.1\TabsHolder\TabsHolder.csproj ";
+            string projectNmae = OutputFolder + @"\TabsHolder\TabsHolder\TabsHolder.csproj ";
 
             Directory.CreateDirectory(OutputFolder + "\\bin ");
             string appFolder = OutputFolder + "\\bin ";
@@ -79,7 +135,7 @@ namespace Installer
             Dictionary<string, string> GlobalProperty = new Dictionary<string, string>();
             GlobalProperty.Add("Configuration", "Release");
             GlobalProperty.Add("Platform", "Any CPU");
-            GlobalProperty.Add("OutputPath", Directory.GetCurrentDirectory() + "\\build\\\bin\\Release");
+            GlobalProperty.Add("OutputPath", OutputFolder + @"\bin");
 
             BuildParameters bp = new BuildParameters(pc);
             bp.Loggers = new[] {
@@ -104,11 +160,12 @@ namespace Installer
             }
         }
 
-    
-            
-            
-
-    
+        void RemoveTrash()
+        {
+            File.Delete(OutputPath);
+            CleaningStageVisibility = "Visible";
+            DoneStageVisibility = "Visible";
+        }
 
 
         public ObservableCollection<Build> Builds { get; set; } = new ObservableCollection<Build>();
