@@ -14,10 +14,11 @@ using Microsoft.Build.Utilities;
 using Microsoft.Build.Evaluation;
 using Microsoft.Build.Logging;
 using Installer.ViewModels;
+using System.ComponentModel;
 
 namespace Installer
 {
-    class MainWindowViewModel : ViewModelBase
+    class MainWindowViewModel : ViewModelBase, IDataErrorInfo
     {
         public MainWindowViewModel()
         {
@@ -169,5 +170,25 @@ namespace Installer
 
 
         public ObservableCollection<Build> Builds { get; set; } = new ObservableCollection<Build>();
+
+        string IDataErrorInfo.Error => throw new NotImplementedException();
+
+        string IDataErrorInfo.this[string columnName]
+        {
+            get
+            {
+                string error = String.Empty;
+                switch (columnName)
+                {
+                    case "OutputFolder":
+                        if (!Directory.Exists(OutputFolder))
+                        {
+                            error = "Path not existed!";
+                        }
+                        break;
+                }
+                return error;
+            }
+        }
     }
 }
