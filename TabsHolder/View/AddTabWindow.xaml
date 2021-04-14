@@ -23,7 +23,7 @@
             <!--..<TextBox x:Name="urlInput" Width="600" Margin="0,0,0,0" HorizontalAlignment="Left" Text="{Binding Url, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"> -->
             <TextBox Width="600" HorizontalAlignment="Left">
                 <TextBox.Text>
-                    <Binding Path="Url">
+                    <Binding Path="Url" UpdateSourceTrigger="PropertyChanged">
                         <Binding.ValidationRules>
                             <DataErrorValidationRule />
                         </Binding.ValidationRules>
@@ -36,7 +36,7 @@
             -->
             <TextBox Width="600" HorizontalAlignment="Left">
                 <TextBox.Text>
-                    <Binding Path="Rating">
+                    <Binding Path="Rating" UpdateSourceTrigger="PropertyChanged">
                         <Binding.ValidationRules>
                             <DataErrorValidationRule />
                         </Binding.ValidationRules>
