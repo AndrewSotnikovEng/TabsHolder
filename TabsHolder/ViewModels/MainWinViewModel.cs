@@ -30,7 +30,7 @@ namespace TabsHolder
         private string browserPath = @"C:\Program Files\Mozilla Firefox\firefox.exe";
 
         private TabItem selectedItem;
-        public string CurrentSessionName { get; set; }
+        public string CurrentSessionPath { get; set; }
 
         public Session InitialSession { get; set; }
         public Session CurrentSession { get; set; }
@@ -100,7 +100,7 @@ namespace TabsHolder
 
         private void OverwriteSession()
         {
-            SaveSession(CurrentSessionName);
+            SaveSession(CurrentSessionPath);
         }
 
         private bool OverwriteSessionCanExecute(object arg)
@@ -271,7 +271,7 @@ namespace TabsHolder
                 MessengerStatic.NotifySessionOverwriting(null);
             }
 
-            CurrentSessionName = fileName;
+            CurrentSessionPath = fileName;
             if (!File.Exists(fileName)) return;
             CurrentSession = XmlSerializerService.Deserialize(fileName);
             browserPath = CurrentSession.browserPath;
@@ -301,6 +301,16 @@ namespace TabsHolder
 
         public void UnloadSession()
         {
+            if (IsSessionLoaded)
+            {
+                if (IsSessionChanged())
+                {
+                    MessengerStatic.NotifySessionOverwriting(null);
+                }
+                CurrentSession = null;
+                InitialSession = null;
+                CurrentSessionPath = null;
+            }
             LoadDbModels();
             IsSessionLoaded = false;
             WireFilter();
