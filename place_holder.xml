@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<BuildHolder>
+    <Builds>
+    <Build>
+        <VersionName>v0.1.0</VersionName>
+        <Url>url1</Url>
+    </Build>
+    <Build>
+        <VersionName>v1.1</VersionName>
+        <Url>https://github.com/AndrewSotnikovEng/TabsHolder/releases/download/v1.1/TabsHolder.zip</Url>
+    </Build> 
+    <Build>
+        <VersionName>v1.2</VersionName>
+        <Url>https://github.com/AndrewSotnikovEng/TabsHolder/releases/download/v1.2/TabsHolder.zip</Url>
+    </Build> 
+    </Builds>
+</BuildHolder>
