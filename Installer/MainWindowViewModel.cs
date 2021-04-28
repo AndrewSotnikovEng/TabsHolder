@@ -15,6 +15,8 @@ using Microsoft.Build.Evaluation;
 using Microsoft.Build.Logging;
 using Installer.ViewModels;
 using System.ComponentModel;
+using System.Xml.Serialization;
+using System.Xml;
 
 namespace Installer
 {
@@ -22,15 +24,30 @@ namespace Installer
     {
         public MainWindowViewModel()
         {
-            Builds.Add(new Build("v0.1.0", "url1"));
-            Builds.Add(new Build("v1.1", "https://github.com/AndrewSotnikovEng/TabsHolder/releases/download/v1.1/TabsHolder.zip"));
+            LoadBuilds();
+
         }
 
-
-        public void LoadVersions()
+        private void LoadBuilds()
         {
+            string url = @"https://raw.githubusercontent.com/AndrewSotnikovEng/TabsHolder/master/place_holder.xml";
 
+            ServicePointManager.Expect100Continue = true;
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+
+            XmlSerializer serializer = new XmlSerializer(typeof(BuildHolder));
+            XmlTextReader reader = new XmlTextReader(url);
+
+            BuildHolder b = (BuildHolder)serializer.Deserialize(reader);
+            reader.Close();
+
+            foreach (var item in b.Builds)
+            {
+                Builds.Add(item);
+            }
+            
         }
+
 
         public string DownloadingStageColor { get; set; }
         public string ExtractingStageColor { get; set; }
