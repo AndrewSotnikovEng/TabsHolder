@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Installer"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="TabsHolder Installer" Height="450" Width="800"
+        WindowStartupLocation="CenterScreen">
     <Window.Resources>
         
         <Style x:Key="BottomButtonsContainer" TargetType="StackPanel">
@@ -35,7 +36,7 @@
                         </Binding>
                     </TextBox.Text>
                 </TextBox>
-                <Button Style="{StaticResource Button}" Margin="0,0,0,0" Content="Browse" >
+                <Button Style="{StaticResource Button}" Margin="0,0,0,0" Content="Browse" Click="BrowseButton_Click" >
                     
                 </Button>
             </StackPanel>
@@ -61,7 +62,7 @@
             <TextBlock Style="{StaticResource ComboItem}" Visibility="{Binding DoneStageVisibility}">Done! :)</TextBlock>
         </StackPanel>
         <StackPanel Style="{StaticResource BottomButtonsContainer}">
-            <Button Style="{StaticResource Button}" Content="OK" Command="{Binding RunInstallationCmd}" Click="Button_Click"/>
+            <Button Style="{StaticResource Button}" Content="OK" Command="{Binding RunInstallationCmd}"/>
             <Button Style="{StaticResource Button}" Content="Cancel" Command="{Binding QuitCmd}"/>
         </StackPanel>
     </StackPanel>
