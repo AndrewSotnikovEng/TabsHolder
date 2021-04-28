@@ -28,7 +28,7 @@ namespace TabsHolder
 
         void AddTabWindow_Closing(object sender, CancelEventArgs e)
         {
-            MessengerStatic.NotifyAttTabClosing("Add tab have been closed");
+            MessengerStatic.NotifyAddTabWinClosing("Add tab have been closed");
         }
     }
 }

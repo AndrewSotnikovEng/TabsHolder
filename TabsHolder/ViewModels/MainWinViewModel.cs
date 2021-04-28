@@ -16,6 +16,7 @@ using TabsHolder.ViewModels;
 using TabsHolder.View;
 using TabsHolder.Services;
 using TabsHolder.Data;
+using System.Windows;
 
 namespace TabsHolder
 {
@@ -24,47 +25,17 @@ namespace TabsHolder
         public ApplicationContext db;
         private ObservableCollection<TabItem> tabItems = new ObservableCollection<TabItem>();
         private string filterWord;
-        private bool checkAll;
+        public bool IsSessionLoaded { get; set; } = false;
         private ICollectionView tabItemsView;
         private string browserPath = @"C:\Program Files\Mozilla Firefox\firefox.exe";
 
         private TabItem selectedItem;
+        public string CurrentSessionName { get; set; }
 
+        public Session InitialSession { get; set; }
+        public Session CurrentSession { get; set; }
 
-        public TabItem SelectedItem
-        {
-            get { return this.selectedItem; }
-            set
-            {
-                if (value != this.selectedItem)
-                {
-                    this.selectedItem = value;
-                    this.OnPropertyChanged("SelectedItem");
-                }
-            }
-        }
-
-        public MainWinViewModel()
-        {
-
-            db = new ApplicationContext();
-            loadDbModels();
-            tabItemsView = CollectionViewSource.GetDefaultView(TabItems);
-            tabItemsView.Filter = o => String.IsNullOrEmpty(FilterWord) ? 
-                    true : Regex.IsMatch(((TabItem)o).Title, $"{FilterWord}", RegexOptions.IgnoreCase);
-
-            DeleteTabItemCmd = new RelayCommand(o => { DeleteTabItem(); });
-            OpenInFirefoxCmd = new RelayCommand(o => { OpenInFirefox(); });
-            OpenAboutWindowCmd = new RelayCommand(o => { OpenAboutWindow(); });
-            AddBtnClickCmd = new RelayCommand(o => { AddBtnСlick(); });
-            SaveSessionCmd = new RelayCommand(o => { SaveSession(); });
-            LoadLastSessionCmd = new RelayCommand(o => { LoadLastSession(); });
-            ExitCmd = new RelayCommand(o => { ExitApp(); });
-
-            MessengerStatic.CloseAddTabWindow += AddTabClosing;
-
-            
-        }
+        public string recentlySavedSession;
 
         public ObservableCollection<TabItem> TabItems
         {
@@ -78,6 +49,151 @@ namespace TabsHolder
                 OnPropertyChanged("TabItems");
             }
         }
+
+        public TabItem SelectedItem
+        {
+            get { return selectedItem; }
+            set
+            {
+                if (value != selectedItem)
+                {
+                    selectedItem = value;
+                    OnPropertyChanged("SelectedItem");
+                    if (selectedItem != null)
+                    {
+                        Clipboard.SetDataObject(selectedItem.Url);
+                    }
+                }
+            }
+        }
+
+        public MainWinViewModel()
+        {
+
+            db = new ApplicationContext();
+            LoadDbModels();
+            WireFilter();
+
+            DeleteTabItemCmd = new RelayCommand(o => { DeleteTabItem(); }, DeleteTabItemCanExecute);
+            OpenInFirefoxCmd = new RelayCommand(o => { OpenInFirefox(); });
+            OpenAboutWindowCmd = new RelayCommand(o => { OpenAboutWindow(); });
+            AddBtnClickCmd = new RelayCommand(o => { AddBtnСlick(); }, AddBtnClickCanExecute);
+            RenameTabItemCmd = new RelayCommand(o => { RenameBtnСlick(); }, RenameBtnClickCanExecute);
+            SaveConfigCmd = new RelayCommand(o => { SaveConfig(); });
+            UnloadSessionCmd = new RelayCommand(o => { UnloadSession(); }, UnloadSessionCanExecute);
+            OverwriteSessionCmd = new RelayCommand(o => { OverwriteSession(); }, OverwriteSessionCanExecute);
+            
+
+            MessengerStatic.AddTabWindowClosed += AddTabClosing;
+            MessengerStatic.TabItemNameChanged += SelectedItemChanged;
+            MessengerStatic.SessionOverwrited += (obj) => OverwriteSession();
+
+        }
+
+        public void CreateSession(string fileName)
+        {
+            TabItems.Clear();
+            SaveSession(fileName);
+            LoadSession(fileName);
+        }
+
+
+        private void OverwriteSession()
+        {
+            SaveSession(CurrentSessionName);
+        }
+
+        private bool OverwriteSessionCanExecute(object arg)
+        {
+            bool result = IsSessionLoaded ? true : false;
+
+            return result;
+        }
+
+        private void SelectedItemChanged(object obj)
+        {
+            tabItemsView.Refresh();
+            db.SaveChanges();
+
+        }
+
+        public RelayCommand RenameTabItemCmd
+        {
+            get;
+            private set;
+        }
+        private void RenameBtnСlick()
+        {
+            MessengerStatic.NotifyRenameTabWindowOpenning(SelectedItem);
+        }
+
+        private bool RenameBtnClickCanExecute(object arg)
+        {
+            //bool result = IsSessionLoaded ? false : true;
+
+            return true;
+        }
+
+
+        private void WireFilter()
+        {
+            tabItemsView = CollectionViewSource.GetDefaultView(TabItems);
+            tabItemsView.Filter = o => String.IsNullOrEmpty(FilterWord) ?
+                    true : Regex.IsMatch(((TabItem)o).Title, $"{FilterWord}", RegexOptions.IgnoreCase);
+        }
+
+        public RelayCommand DeleteTabItemCmd
+        {
+            get;
+            private set;
+        }
+        private void DeleteTabItem()
+        {
+            for (int i = 0; i < TabItems.Count; i++)
+            {
+                if (SelectedItem == null) break;
+                if (TabItems.ElementAt(i).Title == SelectedItem.Title)
+                {
+                    if (!IsSessionLoaded) //for database
+                    {
+                        db.tabItems.Remove(TabItems.ElementAt(i));
+                        db.SaveChanges();
+                        LoadDbModels();
+                    } else //for xml file
+                    {
+                        TabItems.Remove(TabItems.ElementAt(i));
+                    }
+                }
+            }
+
+        }
+        private bool DeleteTabItemCanExecute(object arg)
+        {
+            //bool result = IsSessionLoaded ? false : true;
+
+            return true;
+        }
+
+        public RelayCommand AddBtnClickCmd
+        {
+            get;
+            private set;
+        }
+
+        
+        private void AddBtnСlick()
+        {
+            MessengerStatic.NotifyAddTabWindowOpenning();
+            MessengerStatic.TabItemAdded += AddTabItem;
+        }
+
+        private bool AddBtnClickCanExecute(object arg)
+        {
+            //bool result = IsSessionLoaded ? false : true;
+
+            return true;
+        }
+
         public string FilterWord
         {
             get
@@ -98,16 +214,16 @@ namespace TabsHolder
         public ObservableCollection<TabItem> InitialTabItems { get; set; } = new ObservableCollection<TabItem>();
         public bool CheckAll { 
         get {
-                return checkAll;
+                return CheckAll;
             }
 
         set {
-                toggleCheckBoxes(value);
+                ToggleCheckBoxes(value);
                 Console.WriteLine("Do something");
             } 
         }
 
-        private void toggleCheckBoxes(bool isChecked)
+        private void ToggleCheckBoxes(bool isChecked)
         {
             ObservableCollection<TabItem> tmpTabItems = new ObservableCollection<TabItem>();
             foreach (TabItem item in TabItems)
@@ -127,7 +243,7 @@ namespace TabsHolder
             }
         }
 
-        public void loadDbModels()
+        public void LoadDbModels()
         {
             db.tabItems.Load();
             var someList = db.tabItems.Local.ToBindingList();
@@ -139,96 +255,82 @@ namespace TabsHolder
             InitialTabItems = TabItems;
         }
 
-        private void DeleteTabItem()
-        {
-            for (int i = 0; i < TabItems.Count; i++)
-            {
-                if (SelectedItem == null) break;
-                if (TabItems.ElementAt(i).Title == SelectedItem.Title)
-                {
-                    db.tabItems.Remove(TabItems.ElementAt(i));
-                    db.SaveChanges();
-                    loadDbModels();
-                }
-            }
-        }
 
-        private void AddBtnСlick()
+        public void LoadConfig()
         {
-            AddTabWindow addTabWin = new AddTabWindow();
-            addTabWin.Show();
-            MessengerStatic.Bus += Receive;
-        }
-
-        public void LoadLastSession()
-        {
-            Session ses = XmlSerializerService.Deserialize("config.ses");
+            string configFileName = "config.ses";
+            if (!File.Exists(configFileName)) return;
+            Session ses = XmlSerializerService.Deserialize(configFileName);
             browserPath = ses.browserPath;
-            TabItems.Clear();
-            foreach (TabItem item in ses.TabItems)
+        }
+
+        public void LoadSession(string fileName)
+        {
+            if (IsSessionChanged())
             {
-                TabItems.Add(item);
+                MessengerStatic.NotifySessionOverwriting(null);
             }
 
+            CurrentSessionName = fileName;
+            if (!File.Exists(fileName)) return;
+            CurrentSession = XmlSerializerService.Deserialize(fileName);
+            browserPath = CurrentSession.browserPath;
+            TabItems = CurrentSession.TabItems;
+
+            IsSessionLoaded = true;
+            InitialSession = new Session(CurrentSession);
+
+            WireFilter();
         }
-        public void SaveSession()
+
+        public void SaveSession(string fileName)
         {
-            Session ses = new Session();
-            ses.browserPath = browserPath;
-            ses.TabItems = TabItems;
-            XmlSerializerService.Serialize("config.ses", ses);
+                CurrentSession= new Session();
+                CurrentSession.browserPath = browserPath;
+                CurrentSession.TabItems = TabItems;
+                
+                XmlSerializerService.Serialize(fileName, CurrentSession);
         }
 
-        public void ExitApp()
-        {
-            this.SaveSession();
-            MessengerStatic.NotifyMainWindowClosing(null);
-        }
-
-
-        public RelayCommand DeleteTabItemCmd
+        public RelayCommand UnloadSessionCmd
         {
             get;
             private set;
         }
+        public RelayCommand OverwriteSessionCmd { get; }
+
+        public void UnloadSession()
+        {
+            LoadDbModels();
+            IsSessionLoaded = false;
+            WireFilter();
+        }
+        private bool UnloadSessionCanExecute(object arg)
+        {
+
+            bool result = IsSessionLoaded ? true : false;
+
+            return result;
+        }
+
+        public RelayCommand SaveConfigCmd
+        {
+            get;
+            private set;
+        }
+        public void SaveConfig()
+        {
+            Session ses = new Session();
+            ses.browserPath = browserPath;
+            XmlSerializerService.Serialize("config.ses", ses);
+        }
+
 
         public RelayCommand OpenInFirefoxCmd
         {
             get;
             private set;
         }
-
-        public RelayCommand OpenAboutWindowCmd
-        {
-            get;
-            private set;
-        }
-
-        public RelayCommand AddBtnClickCmd
-        {
-            get;
-            private set;
-        }
-
-        public RelayCommand SaveSessionCmd
-        {
-            get;
-            private set;
-        }
-
-        public RelayCommand ExitCmd
-        {
-            get;
-            private set;
-        }
-
-
-        public RelayCommand LoadLastSessionCmd
-        {
-            get;
-            private set;
-        }
-
         private void OpenInFirefox()
         {
             //get urls
@@ -273,27 +375,55 @@ namespace TabsHolder
             }
         }
 
+        public RelayCommand OpenAboutWindowCmd
+        {
+            get;
+            private set;
+        }
         private void OpenAboutWindow()
         {
             AboutWindow about = new AboutWindow();
             about.Show();
         }
 
-        private void Receive(object data)
+
+        void AddTabItem(object data)
         {
             if (data is TabItem)
             {
                 TabItem tabItem = (TabItem)data;
-                db.tabItems.Add(tabItem);
-                db.SaveChanges();
-                loadDbModels();
-                InitialTabItems = TabItems;
+                if (!IsSessionLoaded) //for database
+                {
+                    db.tabItems.Add(tabItem);
+                    db.SaveChanges();
+                    LoadDbModels();
+                    InitialTabItems = TabItems;
+                } else //for xml
+                {
+                    TabItems.Add(tabItem);
+                }
+
             }
         }
 
         private void AddTabClosing(object data)
         {
-            MessengerStatic.Bus -= Receive;
+            MessengerStatic.TabItemAdded -= AddTabItem;
         }
+
+        public bool IsSessionChanged()
+        {
+            bool result = false;
+            if (CurrentSession == null || InitialSession == null)
+            {
+                return false;
+            }
+            result = (!CurrentSession.Equals(InitialSession)) ? true : false;
+
+            return result;
+
+        }
+
+
     }
 }

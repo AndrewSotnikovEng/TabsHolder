@@ -17,6 +17,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TabsHolder.ViewModels;
 
 namespace TabsHolder
 {
@@ -24,36 +25,132 @@ namespace TabsHolder
     public partial class MainWindow : Window
     {
 
-        MainWinViewModel mainWinViewModel = new MainWinViewModel();
         public MainWindow()
         {
             InitializeComponent();
-            
-            this.DataContext = mainWinViewModel;
-            //for closing via File -> Exit
-            MessengerStatic.CloseMainWindow += MainWindowClose;
+
+            this.DataContext = new MainWinViewModel();
+            MessengerStatic.AddTabWindowOpened += CreateAddTabWindow;
+            MessengerStatic.RenameTabWindowOpened += CreateRenameTabWin;
+
+            Closing += MainWindow_Closing;
+
+
 
         }
 
-        void MainWindowClose(object obj)
+
+        private void MainWindow_Closing(object sender, CancelEventArgs e)
+        {
+            if (((MainWinViewModel)DataContext).IsSessionChanged())
+            {
+                var result = MessageBox.Show("Session was changed, do you want to save it?", "Session changed", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if (result == MessageBoxResult.Yes)
+                {
+                    MessengerStatic.NotifySessionOverwriting(null);
+                }
+            }
+        }
+
+        //to replace
+        void MainWindowClose(object sender, RoutedEventArgs e)
         {
             this.Close();
         }
 
-        //for closing via "X" sign
-        void ClosingFromRightCorner(object sender, CancelEventArgs e)
+        void BeforeClosingActions(object sender, CancelEventArgs e)
         {
-            ((MainWinViewModel)DataContext).SaveSession();
+            ((MainWinViewModel)DataContext).SaveConfig();
         }
 
         private void MainWindow_Loaded(object sender, EventArgs e)
         {
-            ((MainWinViewModel)DataContext).LoadLastSession();
+            ((MainWinViewModel)DataContext).LoadConfig();
         }
 
-        private void Window_Closing(object sender, CancelEventArgs e)
+        public void CreateSession_Click(object sender, EventArgs e)
+        {
+            Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
+            dlg.FileName = $"Session_{DateTime.Now.ToString("ddmmhhmmss")}"; // Default file name
+            dlg.DefaultExt = ".ses"; // Default file extension
+            dlg.Filter = "Session files (.ses)|*.ses"; // Filter files by extension
+            dlg.InitialDirectory = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+
+            Nullable<bool> result = dlg.ShowDialog();
+
+            if (result == true)
+            {
+                ((MainWinViewModel)DataContext).CreateSession(dlg.FileName);
+            }
+            else
+            {
+                string message = "Please select file next time";
+                string caption = "Info";
+                MessageBoxButton buttons = MessageBoxButton.OK;
+                MessageBoxImage icon = MessageBoxImage.Warning;
+                MessageBox.Show(message, caption, buttons, icon);
+            }
+        }
+
+
+        public void SaveSessionAs_Click(object sender, EventArgs e)
+        {
+            Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
+            dlg.FileName = $"Session_{DateTime.Now.ToString("ddmmhhmmss")}"; // Default file name
+            dlg.DefaultExt = ".ses"; // Default file extension
+            dlg.Filter = "Session files (.ses)|*.ses"; // Filter files by extension
+            dlg.InitialDirectory = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+
+            Nullable<bool> result = dlg.ShowDialog();
+
+            if (result == true)
+            {
+                ((MainWinViewModel)DataContext).SaveSession(dlg.FileName);
+            }
+            else
+            {
+                string message = "Please select file next time";
+                string caption = "Info";
+                MessageBoxButton buttons = MessageBoxButton.OK;
+                MessageBoxImage icon = MessageBoxImage.Warning;
+                MessageBox.Show(message, caption, buttons, icon);
+            }
+        }
+
+
+        public void LoadSession_Click(object senser, EventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Multiselect = false;
+            openFileDialog.Filter = "Session files (.ses)|*.ses"; // Filter files by extension
+            openFileDialog.InitialDirectory = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+            if (openFileDialog.ShowDialog() == true)
+            {
+                ((MainWinViewModel)DataContext).LoadSession(openFileDialog.FileNames[0]);
+            }
+            else
+            {
+                string message = "Please select file next time";
+                string caption = "Info";
+                MessageBoxButton buttons = MessageBoxButton.OK;
+                MessageBoxImage icon = MessageBoxImage.Warning;
+                MessageBox.Show(message, caption, buttons, icon);
+            }
+        }
+
+        public void CreateAddTabWindow(object data)
         {
 
+            AddTabWindow addTabWin = new AddTabWindow();
+            addTabWin.Show();
         }
+
+        public void CreateRenameTabWin(object selectedItem)
+        {
+            RenameTabWindow renameTabWindow = new RenameTabWindow();
+            ((RenameTabViewModel)renameTabWindow.DataContext).SelectedTabItem = (TabItem)selectedItem;
+            renameTabWindow.Show();
+        }
+
     }
 }

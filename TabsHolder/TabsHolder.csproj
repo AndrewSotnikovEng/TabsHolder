@@ -132,15 +132,24 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Commands\RelayCommand.cs" />
+    <Compile Include="Data\Config.cs" />
     <Compile Include="Data\Session.cs" />
     <Compile Include="Services\XmlSerializerService.cs" />
+    <Compile Include="ViewModels\RenameTabViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
+    <Compile Include="View\RenameTabWindow.xaml.cs">
+      <DependentUpon>RenameTabWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\AddTabWindow.xaml.cs">
       <DependentUpon>AddTabWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\AboutWindow.xaml.cs">
       <DependentUpon>AboutWindow.xaml</DependentUpon>
     </Compile>
+    <Page Include="View\RenameTabWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="View\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

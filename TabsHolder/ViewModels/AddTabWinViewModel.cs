@@ -23,7 +23,7 @@ namespace TabsHolder
         private void AddBtnСlick()
         {
             TabItem tabItem = new TabItem(Url, Rating, 0);
-            MessengerStatic.Send(tabItem);
+            MessengerStatic.NotifyAboutTabItemAdding(tabItem);
         }
 
         public RelayCommand AddBtnClickCmd
