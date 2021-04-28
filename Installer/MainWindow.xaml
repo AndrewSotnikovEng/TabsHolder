@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Installer"
         mc:Ignorable="d"
-        Title="TabsHolder Installer" Height="450" Width="800"
+        Title="TabsHolder Installer" Height="350" Width="800"
         WindowStartupLocation="CenterScreen">
     <Window.Resources>
         
@@ -20,8 +20,10 @@
             <Setter Property="Button.Height" Value="25"/>
             <Setter Property="Button.Margin" Value="20,20,0,0"/>
         </Style>
-        <Style x:Key="ComboItem">
-            <Setter Property="Button.Margin" Value="0,5,0,5" />
+        <Style x:Key="Stage">
+            <Setter Property="TextBlock.Margin" Value="0,5,0,5" />
+            <Setter Property="TextBlock.FontWeight" Value="Bold" />
+            <Setter Property="TextBlock.Foreground" Value="Green" />
         </Style>
     </Window.Resources>
     <StackPanel Orientation="Vertical">
@@ -37,7 +39,6 @@
                     </TextBox.Text>
                 </TextBox>
                 <Button Style="{StaticResource Button}" Margin="0,0,0,0" Content="Browse" Click="BrowseButton_Click" >
-                    
                 </Button>
             </StackPanel>
 
@@ -52,18 +53,16 @@
             </ComboBox>
 
 
-
-
         </StackPanel>
-        <StackPanel Orientation="Vertical" Margin="20" Height="200">
-            <TextBlock Style="{StaticResource ComboItem}" Visibility="{Binding DownloadingStageVisibility}">Downloading</TextBlock>
-            <TextBlock Style="{StaticResource ComboItem}" Visibility="{Binding ExtractingStageVisibility}">Extracting</TextBlock>
-            <TextBlock Style="{StaticResource ComboItem}" Visibility="{Binding CleaningStageVisibility}">Cleaning cashes</TextBlock>
-            <TextBlock Style="{StaticResource ComboItem}" Visibility="{Binding DoneStageVisibility}">Done! :)</TextBlock>
+        <StackPanel Orientation="Vertical" Margin="20,20,20,0" Height="120">
+            <TextBlock Style="{StaticResource Stage}" Visibility="{Binding DownloadingStageVisibility}">Downloading</TextBlock>
+            <TextBlock Style="{StaticResource Stage}" Visibility="{Binding ExtractingStageVisibility}">Extracting</TextBlock>
+            <TextBlock Style="{StaticResource Stage}" Visibility="{Binding CleaningStageVisibility}">Cleaning cashes</TextBlock>
+            <TextBlock Style="{StaticResource Stage}" Visibility="{Binding DoneStageVisibility}">Done! :)</TextBlock>
         </StackPanel>
         <StackPanel Style="{StaticResource BottomButtonsContainer}">
             <Button Style="{StaticResource Button}" Content="OK" Command="{Binding RunInstallationCmd}"/>
-            <Button Style="{StaticResource Button}" Content="Cancel" Command="{Binding QuitCmd}"/>
+            <Button Style="{StaticResource Button}" Content="Cancel" Click="CancelButton_Click" />
         </StackPanel>
     </StackPanel>
 

@@ -1,19 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Forms;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Installer
 {
@@ -27,7 +14,12 @@ namespace Installer
             InitializeComponent();
             DataContext = new MainWindowViewModel();
 
+            MessengerStatic.OutputFolderNotEmpty += MessengerStatic_OutputFolderNotEmpty;
+        }
 
+        private void MessengerStatic_OutputFolderNotEmpty(object obj)
+        {
+            System.Windows.MessageBox.Show($"Folder {obj.ToString()} is not empty!", "Installer error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
         public void BrowseButton_Click(object sender, EventArgs e)
@@ -36,6 +28,11 @@ namespace Installer
             DialogResult result = dialog.ShowDialog();
 
             ((MainWindowViewModel)DataContext).OutputFolder = dialog.SelectedPath;
+        }
+
+        private void CancelButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
         }
     }
 }

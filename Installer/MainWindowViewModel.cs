@@ -1,16 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO.Compression;
 using System.IO;
-using System.Diagnostics;
 using Microsoft.Build.Execution;
 using Microsoft.Build.Framework;
-using Microsoft.Build.Utilities;
 using Microsoft.Build.Evaluation;
 using Microsoft.Build.Logging;
 using Installer.ViewModels;
@@ -18,7 +13,6 @@ using System.ComponentModel;
 using System.Xml.Serialization;
 using System.Xml;
 using Installer.Commands;
-using System.Threading;
 
 namespace Installer
 {
@@ -27,13 +21,14 @@ namespace Installer
         public MainWindowViewModel()
         {
             LoadBuilds();
-            RunInstallationCmd = new RelayCommand(o => { Execute(); }, RunInstallationCanExecute);
+            RunInstallationCmd = new RelayCommand(o => { RunInstallation(); }, RunInstallationCanExecute);
+            
         }
 
         private bool RunInstallationCanExecute(object arg)
         {
             bool result = false;
-            if (Directory.Exists(OutputFolder))
+            if (Directory.Exists(OutputFolder) && SelectedItem != null)
             {
                 result = true;
             }
@@ -128,13 +123,24 @@ namespace Installer
 
 
 
-        public void Execute()
+        public void RunInstallation()
         {
             PrepareDestination();
             Download();
-            ExtractToDir();
+            try
+            {
+                ExtractToDir();
+                RemoveTrash();
+            }
+            catch (IOException e)
+            {
+                MessengerStatic.NotifyAboutOutputFolderFilled(OutputFolder);
+                DownloadingStageVisibility = "Hidden";
+                ExtractingStageVisibility = "Hidden";
+                CleaningStageVisibility = "Hidden";
+                DoneStageVisibility = "Hidden";
+    }
             //Compile();
-            RemoveTrash();
 
         }
 
@@ -145,7 +151,11 @@ namespace Installer
             {
                 Directory.Delete(previousFolder, true);
             }
-
+            string previousZip = Path.Combine(OutputFolder, @"\output.zip");
+            if (File.Exists(previousZip))
+            {
+                File.Delete(previousZip);
+            }
         }
 
         private void Download()
