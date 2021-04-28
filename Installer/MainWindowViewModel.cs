@@ -17,6 +17,8 @@ using Installer.ViewModels;
 using System.ComponentModel;
 using System.Xml.Serialization;
 using System.Xml;
+using Installer.Commands;
+using System.Threading;
 
 namespace Installer
 {
@@ -25,7 +27,18 @@ namespace Installer
         public MainWindowViewModel()
         {
             LoadBuilds();
+            RunInstallationCmd = new RelayCommand(o => { Execute(); }, RunInstallationCanExecute);
+        }
 
+        private bool RunInstallationCanExecute(object arg)
+        {
+            bool result = false;
+            if (Directory.Exists(OutputFolder))
+            {
+                result = true;
+            }
+
+            return result;
         }
 
         private void LoadBuilds()
@@ -45,7 +58,7 @@ namespace Installer
             {
                 Builds.Add(item);
             }
-            
+
         }
 
 
@@ -54,41 +67,55 @@ namespace Installer
         public string CleaningStageColor { get; set; }
         public string DoneStageColor { get; set; }
 
-        public string DownloadingStageVisibility { get => downloadingStageVisibility; set
+        public string DownloadingStageVisibility
+        {
+            get => downloadingStageVisibility; set
             {
-                downloadingStageVisibility = value; 
+                downloadingStageVisibility = value;
                 OnPropertyChanged("DownloadingStageVisibility");
             }
         }
-        public string ExtractingStageVisibility { get => extractingStageVisibility; set
+        public string ExtractingStageVisibility
+        {
+            get => extractingStageVisibility; set
             {
                 extractingStageVisibility = value;
                 OnPropertyChanged("ExtractingStageVisibility");
             }
         }
-        public string CleaningStageVisibility { get => cleaningStageVisibility; set
+        public string CleaningStageVisibility
+        {
+            get => cleaningStageVisibility; set
             {
                 cleaningStageVisibility = value;
                 OnPropertyChanged("CleaningStageVisibility");
             }
         }
-        public string DoneStageVisibility { get => doneStageVisibility; set
+        public string DoneStageVisibility
+        {
+            get => doneStageVisibility; set
             {
                 doneStageVisibility = value;
                 OnPropertyChanged("DoneStageVisibility");
             }
         }
 
-        public String OutputFolder { get; set; }
+        public String OutputFolder { get => outputFolder; set
+            {
+                outputFolder = value;
+                OnPropertyChanged("OutputFolder");
+            }
+        }
 
         public String OutputPath { get; set; }
 
         Build selectedItem;
-        
+
         private string downloadingStageVisibility = "Hidden";
         private string extractingStageVisibility = "Hidden";
         private string cleaningStageVisibility = "Hidden";
         private string doneStageVisibility = "Hidden";
+        private string outputFolder;
 
         public Build SelectedItem
         {
@@ -117,8 +144,8 @@ namespace Installer
             if (Directory.Exists(previousFolder))
             {
                 Directory.Delete(previousFolder, true);
-            }  
-            
+            }
+
         }
 
         private void Download()
@@ -189,6 +216,8 @@ namespace Installer
         public ObservableCollection<Build> Builds { get; set; } = new ObservableCollection<Build>();
 
         string IDataErrorInfo.Error => throw new NotImplementedException();
+
+        public RelayCommand RunInstallationCmd { get; }
 
         string IDataErrorInfo.this[string columnName]
         {
