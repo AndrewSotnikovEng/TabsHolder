@@ -68,11 +68,22 @@ namespace TabsHolder
             vm.LoadConfig();
             if (vm.TabsHistory.Count > 0)
             {
-                RecentlyUsedWindow recentlyUsed = new RecentlyUsedWindow(
-                            ((MainWinViewModel)DataContext).TabsHistory
-                );
-                recentlyUsed.Show();
+                ShowRecetlryUsedWindow();
             }
+        }
+
+        private void RecentlyUsed_Click(object sender, EventArgs e)
+        {
+            ShowRecetlryUsedWindow();
+        }
+
+
+        private void ShowRecetlryUsedWindow()
+        {
+            RecentlyUsedWindow recentlyUsed = new RecentlyUsedWindow(
+                        ((MainWinViewModel)DataContext).TabsHistory
+            );
+            recentlyUsed.Show();
         }
 
         public void CreateSession_Click(object sender, EventArgs e)

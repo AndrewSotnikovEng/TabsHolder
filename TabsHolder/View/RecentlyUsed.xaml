@@ -5,15 +5,23 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TabsHolder.View"
         mc:Ignorable="d"
-        Title="Recently used session" Height="360" Width="540"
+        Title="Recently used session" Height="400" Width="540"
         WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <Style x:Key="Button" >
+            <Setter Property="Button.FontSize" Value="14"/>
+            <Setter Property="Button.Width" Value="60"/>
+            <Setter Property="Button.Height" Value="25"/>
+            <Setter Property="Button.Margin" Value="0,20,30,20" />
+        </Style>
+    </Window.Resources>
     <StackPanel Orientation="Vertical">
         <StackPanel>
-            <TextBlock FontSize="24" Margin="20" HorizontalAlignment="Center">
+            <TextBlock FontSize="24" Margin="10" HorizontalAlignment="Center">
                 Please choose last session
             </TextBlock>
         </StackPanel>
-        <StackPanel Margin="30 10 30 30" Height="300" Width="460">
+        <StackPanel Margin="30 10 30 30" Height="210" Width="460">
             <ListBox ItemsSource="{Binding TabsHistory, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                      SelectedItem="{Binding SelectedItem, Mode=OneWayToSource}">
                 <ListBox.ItemTemplate>
@@ -25,6 +33,8 @@
                 </ListBox.ItemTemplate>
             </ListBox>
         </StackPanel>
-
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Style="{StaticResource Button}" Command="{Binding OpenSelectedSessionCmd}" >OK</Button>
+        </StackPanel>
     </StackPanel>
 </Window>

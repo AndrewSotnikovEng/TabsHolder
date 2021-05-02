@@ -6,10 +6,6 @@ using System.Data.Entity;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
 using System.Windows.Data;
 using TabsHolder.Commands;
 using TabsHolder.ViewModels;
@@ -285,6 +281,7 @@ namespace TabsHolder
             InitialSession = new Session(CurrentSession);
 
             TabsHistory.Insert(0, new HistoryItem(CurrentSessionPath));
+            CompressTabsHisotry();
 
             WireFilter();
         }
@@ -339,7 +336,7 @@ namespace TabsHolder
             Config cfg = new Config();
             cfg.browserPath = browserPath;
             
-            CompressTabsHisotry(); //exclude extra items
+            CompressTabsHisotry();
             cfg.TabsHistory = TabsHistory;
 
             XmlSerializerService.SerializeConfg("config.ses", cfg);

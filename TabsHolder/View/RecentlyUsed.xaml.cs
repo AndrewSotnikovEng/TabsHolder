@@ -26,7 +26,13 @@ namespace TabsHolder.View
         {
             InitializeComponent();
             DataContext = new RecentlyUsedWinViewModel(TabsHistory);
+            MessengerStatic.LastSessionSelected += MessengerStatic_LastSessionSelected;
 
+        }
+
+        private void MessengerStatic_LastSessionSelected(object obj)
+        {
+            this.Close();
         }
 
         private void MouseDoubleClickHandler(object sender, MouseButtonEventArgs e)
@@ -34,8 +40,6 @@ namespace TabsHolder.View
             if (e.ClickCount == 2)
             {
                 ((RecentlyUsedWinViewModel)DataContext).ShareLastSession();
-                this.Close();
-
             }
         }
 
