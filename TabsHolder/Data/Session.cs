@@ -42,8 +42,4 @@ namespace TabsHolder.Data
             return result;
         }
     }
-
-
-    
-
 }

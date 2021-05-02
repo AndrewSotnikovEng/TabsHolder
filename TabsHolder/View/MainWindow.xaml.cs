@@ -17,6 +17,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TabsHolder.View;
 using TabsHolder.ViewModels;
 
 namespace TabsHolder
@@ -29,13 +30,11 @@ namespace TabsHolder
         {
             InitializeComponent();
 
-            this.DataContext = new MainWinViewModel();
+            DataContext = new MainWinViewModel();
             MessengerStatic.AddTabWindowOpened += CreateAddTabWindow;
             MessengerStatic.RenameTabWindowOpened += CreateRenameTabWin;
 
             Closing += MainWindow_Closing;
-
-
 
         }
 
@@ -65,7 +64,13 @@ namespace TabsHolder
 
         private void MainWindow_Loaded(object sender, EventArgs e)
         {
-            ((MainWinViewModel)DataContext).LoadConfig();
+            MainWinViewModel vm = ((MainWinViewModel)DataContext);
+            vm.LoadConfig();
+
+            RecentlyUsedWindow recentlyUsed = new RecentlyUsedWindow(
+                ((MainWinViewModel)DataContext).TabsHistory
+            );
+            recentlyUsed.Show();
         }
 
         public void CreateSession_Click(object sender, EventArgs e)

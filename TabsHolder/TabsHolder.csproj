@@ -134,7 +134,9 @@
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Data\Config.cs" />
     <Compile Include="Data\Session.cs" />
+    <Compile Include="Model\HistoryItem.cs" />
     <Compile Include="Services\XmlSerializerService.cs" />
+    <Compile Include="ViewModels\RecentlyUsedWinViewModel.cs" />
     <Compile Include="ViewModels\RenameTabViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="View\RenameTabWindow.xaml.cs">
@@ -145,6 +147,9 @@
     </Compile>
     <Compile Include="View\AboutWindow.xaml.cs">
       <DependentUpon>AboutWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\RecentlyUsed.xaml.cs">
+      <DependentUpon>RecentlyUsed.xaml</DependentUpon>
     </Compile>
     <Page Include="View\RenameTabWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -174,6 +179,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\AboutWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\RecentlyUsed.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

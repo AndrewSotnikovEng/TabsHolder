@@ -17,6 +17,7 @@ using TabsHolder.View;
 using TabsHolder.Services;
 using TabsHolder.Data;
 using System.Windows;
+using TabsHolder.Model;
 
 namespace TabsHolder
 {
@@ -24,6 +25,7 @@ namespace TabsHolder
     {
         public ApplicationContext db;
         private ObservableCollection<TabItem> tabItems = new ObservableCollection<TabItem>();
+        public ObservableCollection<HistoryItem> TabsHistory { get; set; } = new ObservableCollection<HistoryItem>();
         private string filterWord;
         public bool IsSessionLoaded { get; set; } = false;
         private ICollectionView tabItemsView;
@@ -87,7 +89,8 @@ namespace TabsHolder
             MessengerStatic.AddTabWindowClosed += AddTabClosing;
             MessengerStatic.TabItemNameChanged += SelectedItemChanged;
             MessengerStatic.SessionOverwrited += (obj) => OverwriteSession();
-
+            MessengerStatic.LastSessionSelected += (obj) => LoadSession(((HistoryItem)obj).FullPath
+);
         }
 
         public void CreateSession(string fileName)
@@ -260,8 +263,9 @@ namespace TabsHolder
         {
             string configFileName = "config.ses";
             if (!File.Exists(configFileName)) return;
-            Session ses = XmlSerializerService.Deserialize(configFileName);
-            browserPath = ses.browserPath;
+            Config cfg = XmlSerializerService.DeserializeConfig(configFileName);
+            browserPath = cfg.browserPath;
+            TabsHistory = cfg.TabsHistory;
         }
 
         public void LoadSession(string fileName)
@@ -273,23 +277,25 @@ namespace TabsHolder
 
             CurrentSessionPath = fileName;
             if (!File.Exists(fileName)) return;
-            CurrentSession = XmlSerializerService.Deserialize(fileName);
+            CurrentSession = XmlSerializerService.DeserializeSession(fileName);
             browserPath = CurrentSession.browserPath;
             TabItems = CurrentSession.TabItems;
 
             IsSessionLoaded = true;
             InitialSession = new Session(CurrentSession);
 
+            TabsHistory.Add(new HistoryItem(CurrentSessionPath));
+
             WireFilter();
         }
 
         public void SaveSession(string fileName)
         {
-                CurrentSession= new Session();
-                CurrentSession.browserPath = browserPath;
-                CurrentSession.TabItems = TabItems;
+            CurrentSession= new Session();
+            CurrentSession.browserPath = browserPath;
+            CurrentSession.TabItems = TabItems;
                 
-                XmlSerializerService.Serialize(fileName, CurrentSession);
+            XmlSerializerService.SerializeSeesion(fileName, CurrentSession);
         }
 
         public RelayCommand UnloadSessionCmd
@@ -330,9 +336,13 @@ namespace TabsHolder
         }
         public void SaveConfig()
         {
-            Session ses = new Session();
-            ses.browserPath = browserPath;
-            XmlSerializerService.Serialize("config.ses", ses);
+            Config cfg = new Config();
+            cfg.browserPath = browserPath;
+            
+            CompressTabsHisotry(); //exclude extra items
+            cfg.TabsHistory = TabsHistory;
+
+            XmlSerializerService.SerializeConfg("config.ses", cfg);
         }
 
 
@@ -434,6 +444,11 @@ namespace TabsHolder
 
         }
 
+        public void CompressTabsHisotry()
+        {
+            List<HistoryItem> tmpHistory = TabsHistory.GroupBy(x => x.FullPath).Select(x => x.First()).ToList();
+            TabsHistory = new ObservableCollection<HistoryItem>(tmpHistory);
+        }
 
     }
 }

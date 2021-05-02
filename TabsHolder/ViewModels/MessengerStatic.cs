@@ -62,6 +62,11 @@ namespace TabsHolder
             SessionCreated?.Invoke(fileName);
         }
 
+        public static event Action<object> LastSessionSelected;
+
+        public static void NotifyLastSessionSelecting(object session)
+            => LastSessionSelected?.Invoke(session);
+
     }
 }
 
