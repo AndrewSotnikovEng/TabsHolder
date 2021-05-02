@@ -23,6 +23,7 @@ namespace TabsHolder
             
             InitializeComponent();
             DataContext = new AddTabWinViewModel();
+            MessengerStatic.TabItemAdded += (obj) => this.Close();
         }
 
 

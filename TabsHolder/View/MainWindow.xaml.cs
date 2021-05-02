@@ -66,11 +66,13 @@ namespace TabsHolder
         {
             MainWinViewModel vm = ((MainWinViewModel)DataContext);
             vm.LoadConfig();
-
-            RecentlyUsedWindow recentlyUsed = new RecentlyUsedWindow(
-                ((MainWinViewModel)DataContext).TabsHistory
-            );
-            recentlyUsed.Show();
+            if (vm.TabsHistory.Count > 0)
+            {
+                RecentlyUsedWindow recentlyUsed = new RecentlyUsedWindow(
+                            ((MainWinViewModel)DataContext).TabsHistory
+                );
+                recentlyUsed.Show();
+            }
         }
 
         public void CreateSession_Click(object sender, EventArgs e)

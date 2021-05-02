@@ -284,7 +284,7 @@ namespace TabsHolder
             IsSessionLoaded = true;
             InitialSession = new Session(CurrentSession);
 
-            TabsHistory.Add(new HistoryItem(CurrentSessionPath));
+            TabsHistory.Insert(0, new HistoryItem(CurrentSessionPath));
 
             WireFilter();
         }

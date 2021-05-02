@@ -19,7 +19,7 @@
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel  MouseDown="MouseDoubleClickHandler">
-                            <TextBlock Text="{Binding Name}"/>
+                            <TextBlock Text="{Binding Name}" FontSize="14"/>
                         </StackPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
