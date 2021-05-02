@@ -32,7 +32,7 @@ namespace TabsHolder
             {
                 Console.WriteLine(e.Message);
             }
-
+            title = title.Trim();
 
             return title;
         }

@@ -34,6 +34,8 @@
                 <MenuItem Header="Overwrite Session" Command="{Binding OverwriteSessionCmd}" />
                 <MenuItem Header="Unload Session" Command="{Binding UnloadSessionCmd}" />
                 <Separator/>
+                <MenuItem Header="Recently used" Click="RecentlyUsed_Click"/>
+                <Separator/>
                 <MenuItem Header="Exit" Click="MainWindowClose" />
             </MenuItem>
             <MenuItem Header="Help">
