@@ -117,7 +117,7 @@ namespace TabsHolder
             dlg.FileName = $"Session_{DateTime.Now.ToString("ddmmhhmmss")}"; // Default file name
             dlg.DefaultExt = ".ses"; // Default file extension
             dlg.Filter = "Session files (.ses)|*.ses"; // Filter files by extension
-            dlg.InitialDirectory = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+            dlg.InitialDirectory = ((MainWinViewModel)DataContext).RepositoryPath;
 
             Nullable<bool> result = dlg.ShowDialog();
 
@@ -141,7 +141,7 @@ namespace TabsHolder
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Multiselect = false;
             openFileDialog.Filter = "Session files (.ses)|*.ses"; // Filter files by extension
-            openFileDialog.InitialDirectory = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+            openFileDialog.InitialDirectory = ((MainWinViewModel)DataContext).RepositoryPath;
             if (openFileDialog.ShowDialog() == true)
             {
                 ((MainWinViewModel)DataContext).LoadSession(openFileDialog.FileNames[0]);

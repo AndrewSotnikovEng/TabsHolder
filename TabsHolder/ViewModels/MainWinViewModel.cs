@@ -26,7 +26,7 @@ namespace TabsHolder
         public bool IsSessionLoaded { get; set; } = false;
         private ICollectionView tabItemsView;
         private string browserPath = @"C:\Program Files\Mozilla Firefox\firefox.exe";
-
+        public string RepositoryPath { get; set; } 
         private TabItem selectedItem;
         public string CurrentSessionPath { get; set; }
 
@@ -75,18 +75,25 @@ namespace TabsHolder
             DeleteTabItemCmd = new RelayCommand(o => { DeleteTabItem(); }, DeleteTabItemCanExecute);
             OpenInFirefoxCmd = new RelayCommand(o => { OpenInFirefox(); });
             OpenAboutWindowCmd = new RelayCommand(o => { OpenAboutWindow(); });
+            OpenSettingsWindowCmd = new RelayCommand(o => { OpenSettingsWindow(); });
             AddBtnClickCmd = new RelayCommand(o => { AddBtnСlick(); }, AddBtnClickCanExecute);
             RenameTabItemCmd = new RelayCommand(o => { RenameBtnСlick(); }, RenameBtnClickCanExecute);
             SaveConfigCmd = new RelayCommand(o => { SaveConfig(); });
             UnloadSessionCmd = new RelayCommand(o => { UnloadSession(); }, UnloadSessionCanExecute);
             OverwriteSessionCmd = new RelayCommand(o => { OverwriteSession(); }, OverwriteSessionCanExecute);
+
             
 
             MessengerStatic.AddTabWindowClosed += AddTabClosing;
             MessengerStatic.TabItemNameChanged += SelectedItemChanged;
             MessengerStatic.SessionOverwrited += (obj) => OverwriteSession();
-            MessengerStatic.LastSessionSelected += (obj) => LoadSession(((HistoryItem)obj).FullPath
-);
+            MessengerStatic.LastSessionSelected += (obj) => LoadSession(((HistoryItem)obj).FullPath);
+            MessengerStatic.SettingsWindowClosed += UpdateSettings;
+        }
+
+        private void UpdateSettings(object viewBag)
+        {
+            RepositoryPath = ((SettingsViewBag)viewBag).RepositoryPath;
         }
 
         public void CreateSession(string fileName)
@@ -261,6 +268,7 @@ namespace TabsHolder
             if (!File.Exists(configFileName)) return;
             Config cfg = XmlSerializerService.DeserializeConfig(configFileName);
             browserPath = cfg.browserPath;
+            RepositoryPath = cfg.repositoryPath;
             TabsHistory = cfg.TabsHistory;
         }
 
@@ -290,6 +298,7 @@ namespace TabsHolder
         {
             CurrentSession= new Session();
             CurrentSession.browserPath = browserPath;
+            CurrentSession.repositoryPath = RepositoryPath;
             CurrentSession.TabItems = TabItems;
                 
             XmlSerializerService.SerializeSeesion(fileName, CurrentSession);
@@ -335,6 +344,7 @@ namespace TabsHolder
         {
             Config cfg = new Config();
             cfg.browserPath = browserPath;
+            cfg.repositoryPath = RepositoryPath;
             
             CompressTabsHisotry();
             cfg.TabsHistory = TabsHistory;
@@ -397,12 +407,30 @@ namespace TabsHolder
             get;
             private set;
         }
+
+
         private void OpenAboutWindow()
         {
             AboutWindow about = new AboutWindow();
             about.Show();
         }
 
+        public RelayCommand OpenSettingsWindowCmd
+        {
+            get;
+            private set;
+        }
+
+        private void OpenSettingsWindow()
+        {
+            SettingsViewBag viewBag = new SettingsViewBag
+            {
+                RepositoryPath = RepositoryPath
+            };
+                
+            SettingsWindow settings = new SettingsWindow(viewBag);
+            settings.Show();
+        }
 
         void AddTabItem(object data)
         {

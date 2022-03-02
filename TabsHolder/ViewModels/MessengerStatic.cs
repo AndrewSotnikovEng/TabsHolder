@@ -67,6 +67,18 @@ namespace TabsHolder
         public static void NotifyLastSessionSelecting(object session)
             => LastSessionSelected?.Invoke(session);
 
+
+        public static event Action<object> BrowseFolderPathClicked;
+
+        public static void NotifyBrowseFolderPathOpen()
+            => BrowseFolderPathClicked?.Invoke(null);
+
+
+        public static event Action<object> SettingsWindowClosed;
+
+        public static void NotifySettingsWindowClosing(object viewBag)
+            => SettingsWindowClosed?.Invoke(viewBag);
+
     }
 }
 
