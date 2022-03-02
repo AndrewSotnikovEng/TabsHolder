@@ -6,10 +6,11 @@
 $curDir = Get-Location
 rm "..\build.zip"
 mkdir "..\build"
+mkdir "..\build\TabsHolder"
 $files_to_archive = Get-Content "$curDir\build_files.txt"
 foreach ($f in $files_to_archive)
 {
-    Copy-Item -Path "..\TabsHolder\bin\Release\$f" -Destination "..\build"
+    Copy-Item -Path "..\TabsHolder\bin\Release\$f" -Destination "..\build\TabsHolder"
 }
 
 Compress-Archive "..\build\*"  "..\build.zip"

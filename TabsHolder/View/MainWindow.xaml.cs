@@ -92,7 +92,7 @@ namespace TabsHolder
             dlg.FileName = $"Session_{DateTime.Now.ToString("ddmmhhmmss")}"; // Default file name
             dlg.DefaultExt = ".ses"; // Default file extension
             dlg.Filter = "Session files (.ses)|*.ses"; // Filter files by extension
-            dlg.InitialDirectory = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+            dlg.InitialDirectory = ((MainWinViewModel)DataContext).RepositoryPath;
 
             Nullable<bool> result = dlg.ShowDialog();
 
