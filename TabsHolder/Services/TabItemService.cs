@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace TabsHolder
@@ -19,8 +20,15 @@ namespace TabsHolder
             {
                 var webGet = new HtmlWeb();
                 var document = webGet.Load(url);
+
                 title = document.DocumentNode.SelectSingleNode("html/head/title").InnerText;
+                if (title == null)
+                {
+                    throw new NullReferenceException();
+                }
+
             } catch (NullReferenceException e) {
+                title = "Unable to fecth the title, please rename it manually";
                 Console.WriteLine(e.Message);
             } catch (UriFormatException e)
             {
@@ -32,6 +40,7 @@ namespace TabsHolder
             {
                 Console.WriteLine(e.Message);
             }
+
             title = title.Trim();
 
             return title;
