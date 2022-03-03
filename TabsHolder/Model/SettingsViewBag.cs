@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TabsHolder.Model
+﻿namespace TabsHolder.Model
 {
     public class SettingsViewBag
     {
         public string RepositoryPath { get; set; }
-        public string DefaultRatingValue { get; set; }
+        public int DefaultRatingValue { get; set; }
 
     }
 }

@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TabsHolder.Commands;
 using TabsHolder.Model;
 
@@ -15,7 +10,7 @@ namespace TabsHolder.ViewModels
     {
         public string Path { get; set; }
 
-        public string DefaultRatingValue { get; set; }
+        public int DefaultRatingValue { get; set; }
 
         public SettingsWinViewModel(SettingsViewBag viewBag)
         {
@@ -30,16 +25,8 @@ namespace TabsHolder.ViewModels
         private bool SaveSettingsCanExecute(object arg)
         {
             bool result = false;
-            int defaultRatingValue;
-            try
-            {
-                defaultRatingValue = Int32.Parse(DefaultRatingValue);
-            }
-            catch (System.FormatException e)
-            {
-                return result;
-            }
-            if (defaultRatingValue >= 1 && defaultRatingValue <= 10 &&  Directory.Exists(Path))
+        
+            if (DefaultRatingValue >= 1 && DefaultRatingValue <= 10 &&  Directory.Exists(Path))
             {
                 result = true;
             }
@@ -76,17 +63,8 @@ namespace TabsHolder.ViewModels
                         break;
 
                     case "DefaultRatingValue":
-                        int defaultRatingValue;
-                        try
-                        {
-                            defaultRatingValue = Int32.Parse(DefaultRatingValue);
-                        }
-                        catch (System.FormatException e)
-                        {
-                            error = "Value is empty!";
-                            break;
-                        }
-                        if (defaultRatingValue < 1 || defaultRatingValue > 10) error = "Value is out of range!";
+
+                        if (DefaultRatingValue < 1 || DefaultRatingValue > 10) error = "Value is out of range!";
                         break;
                 }
                 this.Error = error;

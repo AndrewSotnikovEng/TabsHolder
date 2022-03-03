@@ -27,22 +27,25 @@ namespace TabsHolder
         private ICollectionView tabItemsView;
         private string browserPath = @"C:\Program Files\Mozilla Firefox\firefox.exe";
 
+        string MY_DOCUMENTS_PATH = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
         string _repositoryPath;
         public string RepositoryPath
         {
             get
             {
-                return (_repositoryPath == null) ? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) : _repositoryPath;
+                return (_repositoryPath == null) ? MY_DOCUMENTS_PATH : _repositoryPath;
             }
             set { _repositoryPath = value; }
         }
 
-        string _defaultRatingValue;
-        public string DefaultRatingValue
+
+        const int DEFAULT_RATING_VALUE = 7;
+        int _defaultRatingValue;
+        public int DefaultRatingValue
         {
             get
             {
-                return (_defaultRatingValue == null) ? "7" : _defaultRatingValue;
+                return (_defaultRatingValue == 0) ? DEFAULT_RATING_VALUE : _defaultRatingValue;
             }
             set { _defaultRatingValue = value; }
         }

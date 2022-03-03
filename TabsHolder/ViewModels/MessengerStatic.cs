@@ -14,6 +14,14 @@ namespace TabsHolder
             => TabItemAdded?.Invoke(newTabItemData);
 
 
+
+        public static event Action<object> TabItemAddedByEnter;
+
+        public static void NotifyAboutTabItemAddingByEnter(object data=null)
+            => TabItemAddedByEnter?.Invoke(data);
+
+
+
         public static event Action<object> AddTabWindowClosed;
 
         public static void NotifyAddTabWinClosing(object data)

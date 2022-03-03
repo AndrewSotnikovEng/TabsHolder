@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TabsHolder.View"
         mc:Ignorable="d"
-        Title="About" Height="301.213" Width="870.562" Background="#272822"
+        Title="About" Height="313.213" Width="870.562" Background="#272822"
         WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <Style x:Key="TextBlock" >
@@ -21,11 +21,11 @@
             <ColumnDefinition Width="91*"/>
             <ColumnDefinition Width="772*"/>
         </Grid.ColumnDefinitions>
-        <StackPanel Margin="0,0,0,67" Grid.ColumnSpan="2">
+        <StackPanel Grid.ColumnSpan="2" Height="266" VerticalAlignment="Top">
             <TextBlock Style="{StaticResource TextBlock}" Width="600" FontSize="24" Margin="100,40,0,0"> Keep favorite tabs near to you :)</TextBlock>
 
-            <StackPanel Height="199">
-                <Grid Margin="100,40,0,50" HorizontalAlignment="Left" VerticalAlignment="Top" Height="137">
+            <StackPanel Height="190" HorizontalAlignment="Left" Width="863">
+                <Grid Margin="0,40,509,50" HorizontalAlignment="Right" VerticalAlignment="Top" Height="137">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition MinWidth="80"/>
                         <ColumnDefinition/>

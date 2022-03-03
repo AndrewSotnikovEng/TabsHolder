@@ -7,11 +7,11 @@ namespace TabsHolder
 {
     public class AddTabWinViewModel : ViewModelBase, IDataErrorInfo
     {
-
-   
-        public AddTabWinViewModel()
+        public AddTabWinViewModel(int defaultRatingValue)
         {
             AddBtnClickCmd = new RelayCommand(o => { AddBtnСlick(); }, CanExecute);
+            Rating = defaultRatingValue;
+            MessengerStatic.TabItemAddedByEnter += (object o) => AddBtnСlick();
         }
 
 
@@ -90,7 +90,4 @@ namespace TabsHolder
             return result;
         }
     }
-
-
-
 }
