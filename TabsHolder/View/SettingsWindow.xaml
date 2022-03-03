@@ -22,10 +22,10 @@
         </Style>
     </Window.Resources>
     <StackPanel Orientation="Vertical" Margin="0,0,0,-2">
-        <StackPanel Margin="36,10,0,5" Height="230" Width="486" HorizontalAlignment="Left">
-            <TextBlock Text="Repository location" Margin="0,10,0,10"/>
+        <StackPanel Margin="20,10,0,5" Height="230" Width="486" HorizontalAlignment="Left">
+            <TextBlock Text="Repository location" Margin="0,10,0,5"/>
             <StackPanel Orientation="Horizontal">
-                <TextBox x:Name="FolderPathTextBox" Width="389" Height="20" Margin="0,0,10,0">
+                <TextBox x:Name="FolderPathTextBox" Width="414" Height="20" Margin="0,0,10,0">
                     <TextBox.Text>
                         <Binding Path="Path" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
                             <Binding.ValidationRules>
@@ -34,9 +34,18 @@
                         </Binding>
                     </TextBox.Text>
                 </TextBox>
-
                 <Button Style="{StaticResource ButtonNarrow}" Command="{Binding BrowseFolderPathCmd}" Content="Browse" />
             </StackPanel>
+            <TextBlock Text="Default rating value" Margin="0,0,0,10"/>
+            <TextBox  x:Name="DefaultRatingValueTextBox" Margin="0,0,0,0" Width="50" HorizontalAlignment="Left" Height="20">
+                <TextBox.Text>
+                    <Binding Path="DefaultRatingValue" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                        <Binding.ValidationRules>
+                            <DataErrorValidationRule />
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
         </StackPanel>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
             <Button Style="{StaticResource Button}" Command="{Binding SaveSettingsCmd}" Content="OK" />

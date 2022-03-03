@@ -9,6 +9,7 @@ namespace TabsHolder.Model
     public class SettingsViewBag
     {
         public string RepositoryPath { get; set; }
+        public string DefaultRatingValue { get; set; }
 
     }
 }

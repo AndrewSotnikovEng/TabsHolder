@@ -26,7 +26,27 @@ namespace TabsHolder
         public bool IsSessionLoaded { get; set; } = false;
         private ICollectionView tabItemsView;
         private string browserPath = @"C:\Program Files\Mozilla Firefox\firefox.exe";
-        public string RepositoryPath { get; set; } 
+
+        string _repositoryPath;
+        public string RepositoryPath
+        {
+            get
+            {
+                return (_repositoryPath == null) ? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) : _repositoryPath;
+            }
+            set { _repositoryPath = value; }
+        }
+
+        string _defaultRatingValue;
+        public string DefaultRatingValue
+        {
+            get
+            {
+                return (_defaultRatingValue == null) ? "7" : _defaultRatingValue;
+            }
+            set { _defaultRatingValue = value; }
+        }
+
         private TabItem selectedItem;
         public string CurrentSessionPath { get; set; }
 
@@ -94,6 +114,7 @@ namespace TabsHolder
         private void UpdateSettings(object viewBag)
         {
             RepositoryPath = ((SettingsViewBag)viewBag).RepositoryPath;
+            DefaultRatingValue = ((SettingsViewBag)viewBag).DefaultRatingValue;
         }
 
         public void CreateSession(string fileName)
@@ -267,8 +288,9 @@ namespace TabsHolder
             string configFileName = "config.ses";
             if (!File.Exists(configFileName)) return;
             Config cfg = XmlSerializerService.DeserializeConfig(configFileName);
-            browserPath = cfg.browserPath;
-            RepositoryPath = cfg.repositoryPath;
+            browserPath = cfg.BrowserPath;
+            RepositoryPath = cfg.RepositoryPath;
+            DefaultRatingValue = cfg.DefaultRatingValue;
             TabsHistory = cfg.TabsHistory;
         }
 
@@ -282,7 +304,7 @@ namespace TabsHolder
             CurrentSessionPath = fileName;
             if (!File.Exists(fileName)) return;
             CurrentSession = XmlSerializerService.DeserializeSession(fileName);
-            browserPath = CurrentSession.browserPath;
+            browserPath = CurrentSession.BrowserPath;
             TabItems = CurrentSession.TabItems;
 
             IsSessionLoaded = true;
@@ -297,8 +319,8 @@ namespace TabsHolder
         public void SaveSession(string fileName)
         {
             CurrentSession= new Session();
-            CurrentSession.browserPath = browserPath;
-            CurrentSession.repositoryPath = RepositoryPath;
+            CurrentSession.BrowserPath = browserPath;
+            CurrentSession.RepositoryPath = RepositoryPath;
             CurrentSession.TabItems = TabItems;
                 
             XmlSerializerService.SerializeSeesion(fileName, CurrentSession);
@@ -343,9 +365,10 @@ namespace TabsHolder
         public void SaveConfig()
         {
             Config cfg = new Config();
-            cfg.browserPath = browserPath;
-            cfg.repositoryPath = RepositoryPath;
-            
+            cfg.BrowserPath = browserPath;
+            cfg.RepositoryPath = RepositoryPath;
+            cfg.DefaultRatingValue = DefaultRatingValue;
+
             CompressTabsHisotry();
             cfg.TabsHistory = TabsHistory;
 
@@ -425,7 +448,8 @@ namespace TabsHolder
         {
             SettingsViewBag viewBag = new SettingsViewBag
             {
-                RepositoryPath = RepositoryPath
+                RepositoryPath = this.RepositoryPath,
+                DefaultRatingValue = this.DefaultRatingValue
             };
                 
             SettingsWindow settings = new SettingsWindow(viewBag);

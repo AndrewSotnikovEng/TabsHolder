@@ -15,21 +15,44 @@ namespace TabsHolder.ViewModels
     {
         public string Path { get; set; }
 
+        public string DefaultRatingValue { get; set; }
+
         public SettingsWinViewModel(SettingsViewBag viewBag)
         {
-            SaveSettingsCmd = new RelayCommand(o => { SaveSettings(); }, (object arg) => true );
+            SaveSettingsCmd = new RelayCommand(o => { SaveSettings(); }, SaveSettingsCanExecute);
             BrowseFolderPathCmd = new RelayCommand(o => { BrowseFolder(); }, (object arg) => true );
 
             Path = viewBag.RepositoryPath;
+            DefaultRatingValue = viewBag.DefaultRatingValue;
 
         }
 
+        private bool SaveSettingsCanExecute(object arg)
+        {
+            bool result = false;
+            int defaultRatingValue;
+            try
+            {
+                defaultRatingValue = Int32.Parse(DefaultRatingValue);
+            }
+            catch (System.FormatException e)
+            {
+                return result;
+            }
+            if (defaultRatingValue >= 1 && defaultRatingValue <= 10 &&  Directory.Exists(Path))
+            {
+                result = true;
+            }
+
+                return result;
+        }
 
         private void SaveSettings()
         {
             SettingsViewBag viewBag = new SettingsViewBag
             {
-                RepositoryPath = Path
+                RepositoryPath = Path,
+                DefaultRatingValue = this.DefaultRatingValue
             };
 
             MessengerStatic.NotifySettingsWindowClosing(viewBag);
@@ -50,6 +73,20 @@ namespace TabsHolder.ViewModels
                 {
                     case "Path":
                         if (!Directory.Exists(Path)) error = "Directory not exist!";
+                        break;
+
+                    case "DefaultRatingValue":
+                        int defaultRatingValue;
+                        try
+                        {
+                            defaultRatingValue = Int32.Parse(DefaultRatingValue);
+                        }
+                        catch (System.FormatException e)
+                        {
+                            error = "Value is empty!";
+                            break;
+                        }
+                        if (defaultRatingValue < 1 || defaultRatingValue > 10) error = "Value is out of range!";
                         break;
                 }
                 this.Error = error;
