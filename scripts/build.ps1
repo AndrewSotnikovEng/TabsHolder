@@ -6,7 +6,7 @@ $scriptDir = Get-Location
 $baseDir = Split-Path -Path $scriptDir -Parent
 
 #base dir with MsBuild should be specified
-$env:MSBUILD_DIR =
+$env:MSBUILD_DIR = "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Current\Bin\"
 
 # BUILD RELEASE
 cd $env:MSBUILD_DIR

@@ -100,7 +100,7 @@ namespace TabsHolder
             OpenAboutWindowCmd = new RelayCommand(o => { OpenAboutWindow(); });
             OpenSettingsWindowCmd = new RelayCommand(o => { OpenSettingsWindow(); });
             AddBtnClickCmd = new RelayCommand(o => { AddBtnСlick(); }, AddBtnClickCanExecute);
-            RenameTabItemCmd = new RelayCommand(o => { RenameBtnСlick(); }, RenameBtnClickCanExecute);
+            EditTabItemCmd = new RelayCommand(o => { EditBtnСlick(); }, EditBtnClickCanExecute);
             SaveConfigCmd = new RelayCommand(o => { SaveConfig(); });
             UnloadSessionCmd = new RelayCommand(o => { UnloadSession(); }, UnloadSessionCanExecute);
             OverwriteSessionCmd = new RelayCommand(o => { OverwriteSession(); }, OverwriteSessionCanExecute);
@@ -147,21 +147,20 @@ namespace TabsHolder
 
         }
 
-        public RelayCommand RenameTabItemCmd
+        public RelayCommand EditTabItemCmd
         {
             get;
             private set;
         }
-        private void RenameBtnСlick()
+        private void EditBtnСlick()
         {
             MessengerStatic.NotifyRenameTabWindowOpenning(SelectedItem);
         }
 
-        private bool RenameBtnClickCanExecute(object arg)
+        private bool EditBtnClickCanExecute(object arg)
         {
-            //bool result = IsSessionLoaded ? false : true;
 
-            return true;
+            return SelectedItem == null ? false : true;
         }
 
 

@@ -151,7 +151,7 @@ namespace TabsHolder
         public void CreateRenameTabWin(object selectedItem)
         {
             RenameTabWindow renameTabWindow = new RenameTabWindow();
-            ((RenameTabViewModel)renameTabWindow.DataContext).SelectedTabItem = (TabItem)selectedItem;
+            ((EditTabViewModel)renameTabWindow.DataContext).SelectedTabItem = (TabItem)selectedItem;
             renameTabWindow.Show();
         }
 

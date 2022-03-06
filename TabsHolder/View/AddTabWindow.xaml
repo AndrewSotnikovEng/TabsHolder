@@ -17,10 +17,10 @@
             <Setter Property="Button.Margin" Value="10,20,10,0" />
         </Style>
     </Window.Resources>
-    <StackPanel Orientation="Vertical">
-        <StackPanel Orientation="Vertical" Margin="20,10,20,0">
+    <StackPanel Orientation="Vertical" FocusManager.FocusedElement="{Binding ElementName=UrlTextBox}">
+        <StackPanel Orientation="Vertical" Margin="20,10,20,0" >
             <TextBlock Margin="0,20,0,0" Foreground="#f8f8f2">Insert URL below:</TextBlock>
-            <TextBox Width="600" HorizontalAlignment="Left" KeyDown="TextBox_KeyDown">
+            <TextBox Name="UrlTextBox" Width="600" HorizontalAlignment="Left" KeyDown="TextBox_KeyDown">
                 <Binding Path="Url" UpdateSourceTrigger="PropertyChanged">
                     <Binding.ValidationRules>
                         <DataErrorValidationRule />
