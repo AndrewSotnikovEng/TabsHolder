@@ -1,22 +1,7 @@
 ﻿using Microsoft.Win32;
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Data.Entity;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using TabsHolder.View;
 using TabsHolder.ViewModels;
 
@@ -92,7 +77,7 @@ namespace TabsHolder
             dlg.FileName = $"Session_{DateTime.Now.ToString("ddmmhhmmss")}"; // Default file name
             dlg.DefaultExt = ".ses"; // Default file extension
             dlg.Filter = "Session files (.ses)|*.ses"; // Filter files by extension
-            dlg.InitialDirectory = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+            dlg.InitialDirectory = ((MainWinViewModel)DataContext).RepositoryPath;
 
             Nullable<bool> result = dlg.ShowDialog();
 
@@ -117,7 +102,7 @@ namespace TabsHolder
             dlg.FileName = $"Session_{DateTime.Now.ToString("ddmmhhmmss")}"; // Default file name
             dlg.DefaultExt = ".ses"; // Default file extension
             dlg.Filter = "Session files (.ses)|*.ses"; // Filter files by extension
-            dlg.InitialDirectory = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+            dlg.InitialDirectory = ((MainWinViewModel)DataContext).RepositoryPath;
 
             Nullable<bool> result = dlg.ShowDialog();
 
@@ -141,7 +126,7 @@ namespace TabsHolder
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Multiselect = false;
             openFileDialog.Filter = "Session files (.ses)|*.ses"; // Filter files by extension
-            openFileDialog.InitialDirectory = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+            openFileDialog.InitialDirectory = ((MainWinViewModel)DataContext).RepositoryPath;
             if (openFileDialog.ShowDialog() == true)
             {
                 ((MainWinViewModel)DataContext).LoadSession(openFileDialog.FileNames[0]);
@@ -158,15 +143,15 @@ namespace TabsHolder
 
         public void CreateAddTabWindow(object data)
         {
-
-            AddTabWindow addTabWin = new AddTabWindow();
+            int defaultRatingValue = ((MainWinViewModel)DataContext).DefaultRatingValue;
+            AddTabWindow addTabWin = new AddTabWindow(defaultRatingValue);
             addTabWin.Show();
         }
 
         public void CreateRenameTabWin(object selectedItem)
         {
             RenameTabWindow renameTabWindow = new RenameTabWindow();
-            ((RenameTabViewModel)renameTabWindow.DataContext).SelectedTabItem = (TabItem)selectedItem;
+            ((EditTabViewModel)renameTabWindow.DataContext).SelectedTabItem = (TabItem)selectedItem;
             renameTabWindow.Show();
         }
 

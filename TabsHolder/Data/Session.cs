@@ -24,7 +24,7 @@ namespace TabsHolder.Data
                 TabItem newTabItem = new TabItem(item.Url, item.Rating, item.IsChecked, item.Title);
                 TabItems.Add(newTabItem);
             }
-            browserPath = session.browserPath;
+            BrowserPath = session.BrowserPath;
         }
 
         public override bool Equals(object obj)
@@ -34,7 +34,7 @@ namespace TabsHolder.Data
             Session objToCompare = (Session)obj;
             if (TabItems.SequenceEqual(objToCompare.TabItems) 
                 && 
-                browserPath == objToCompare.browserPath)
+                BrowserPath == objToCompare.BrowserPath)
             {
                 result = true;
             }

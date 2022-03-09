@@ -10,12 +10,18 @@ namespace TabsHolder.Data
 {
     public class Config
     {
-        public string browserPath;
+        public string BrowserPath { get; set; }
+        public string RepositoryPath { get; set; }
+        public int DefaultRatingValue { get; set; }
+
         public ObservableCollection<HistoryItem> TabsHistory;
 
-        public Config(string browserPath, ObservableCollection<HistoryItem> tabsHistory)
+        public Config(string browserPath, string repositoryPath, int defaultRatingValue, ObservableCollection<HistoryItem> tabsHistory)
         {
-            this.browserPath = browserPath;
+            this.BrowserPath = browserPath;
+            this.RepositoryPath = repositoryPath;
+            this.DefaultRatingValue = defaultRatingValue;
+
             TabsHistory = tabsHistory;
         }
 
