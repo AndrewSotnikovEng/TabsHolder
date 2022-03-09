@@ -113,6 +113,7 @@
     <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.ValueTuple.4.5.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
     </Reference>
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -134,11 +135,16 @@
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Data\Config.cs" />
     <Compile Include="Data\Session.cs" />
+    <Compile Include="Model\SettingsViewBag.cs" />
     <Compile Include="Model\HistoryItem.cs" />
     <Compile Include="Services\XmlSerializerService.cs" />
+    <Compile Include="ViewModels\SettingsWinViewModel.cs" />
     <Compile Include="ViewModels\RecentlyUsedWinViewModel.cs" />
-    <Compile Include="ViewModels\RenameTabViewModel.cs" />
+    <Compile Include="ViewModels\EditTabViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
+    <Compile Include="View\SettingsWindow.xaml.cs">
+      <DependentUpon>SettingsWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\RenameTabWindow.xaml.cs">
       <DependentUpon>RenameTabWindow.xaml</DependentUpon>
     </Compile>
@@ -151,6 +157,10 @@
     <Compile Include="View\RecentlyUsed.xaml.cs">
       <DependentUpon>RecentlyUsed.xaml</DependentUpon>
     </Compile>
+    <Page Include="View\SettingsWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="View\RenameTabWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

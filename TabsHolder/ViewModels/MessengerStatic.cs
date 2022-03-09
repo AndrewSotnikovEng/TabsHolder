@@ -14,6 +14,20 @@ namespace TabsHolder
             => TabItemAdded?.Invoke(newTabItemData);
 
 
+
+        public static event Action<object> TabItemAddedByEnter;
+
+        public static void NotifyAboutTabItemAddingByEnter(object data=null)
+            => TabItemAddedByEnter?.Invoke(data);
+
+
+        public static event Action<object> TabItemEditedByEnter;
+
+        public static void NotifyAboutTabItemEditedByEnter(object data = null)
+            => TabItemEditedByEnter?.Invoke(data);
+
+
+
         public static event Action<object> AddTabWindowClosed;
 
         public static void NotifyAddTabWinClosing(object data)
@@ -66,6 +80,18 @@ namespace TabsHolder
 
         public static void NotifyLastSessionSelecting(object session)
             => LastSessionSelected?.Invoke(session);
+
+
+        public static event Action<object> BrowseFolderPathClicked;
+
+        public static void NotifyBrowseFolderPathOpen()
+            => BrowseFolderPathClicked?.Invoke(null);
+
+
+        public static event Action<object> SettingsWindowClosed;
+
+        public static void NotifySettingsWindowClosing(object viewBag)
+            => SettingsWindowClosed?.Invoke(viewBag);
 
     }
 }

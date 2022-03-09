@@ -7,14 +7,21 @@ using TabsHolder.Commands;
 
 namespace TabsHolder.ViewModels
 {
-    class RenameTabViewModel : ViewModelBase
+    class EditTabViewModel : ViewModelBase
     {
         private TabItem selectedTabItem;
-        public RenameTabViewModel()
+        public EditTabViewModel()
         {
    
             OkBtnCmd = new RelayCommand(o => { RenameValue(); });
             CancelBtnCmd = new RelayCommand(o => { Cancel(); });
+
+            MessengerStatic.TabItemAddedByEnter += MessengerStatic_TabItemAddedByEnter;
+        }
+
+        private void MessengerStatic_TabItemAddedByEnter(object obj)
+        {
+            RenameValue();
         }
 
         private void Cancel()
@@ -25,12 +32,15 @@ namespace TabsHolder.ViewModels
         private void RenameValue()
         {
             SelectedTabItem.Title = TabItemName;
+            SelectedTabItem.Rating = RatingValue;
             MessengerStatic.NotifyTabItemNameChanging(SelectedTabItem);
             MessengerStatic.NotifyRenameTabWindowClosing();
 
         }
 
         public string TabItemName { get; set; }
+
+        public int RatingValue { get; set; }
         public RelayCommand OkBtnCmd { get; }
         public RelayCommand CancelBtnCmd { get; }
 
@@ -38,6 +48,7 @@ namespace TabsHolder.ViewModels
             {
                 selectedTabItem = value;
                 TabItemName = selectedTabItem.Title;
+                RatingValue = selectedTabItem.Rating;
             }
         }
     }

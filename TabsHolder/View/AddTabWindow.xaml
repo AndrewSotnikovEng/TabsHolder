@@ -17,24 +17,22 @@
             <Setter Property="Button.Margin" Value="10,20,10,0" />
         </Style>
     </Window.Resources>
-    <StackPanel Orientation="Vertical">
-        <StackPanel Orientation="Vertical" Margin="20,10,20,0">
+    <StackPanel Orientation="Vertical" FocusManager.FocusedElement="{Binding ElementName=UrlTextBox}">
+        <StackPanel Orientation="Vertical" Margin="20,10,20,0" >
             <TextBlock Margin="0,20,0,0" Foreground="#f8f8f2">Insert URL below:</TextBlock>
-            <!--..<TextBox x:Name="urlInput" Width="600" Margin="0,0,0,0" HorizontalAlignment="Left" Text="{Binding Url, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"> -->
-            <TextBox Width="600" HorizontalAlignment="Left">
-                <TextBox.Text>
-                    <Binding Path="Url" UpdateSourceTrigger="PropertyChanged">
-                        <Binding.ValidationRules>
-                            <DataErrorValidationRule />
-                        </Binding.ValidationRules>
-                    </Binding>
-                </TextBox.Text>
+            <TextBox Name="UrlTextBox" Width="600" HorizontalAlignment="Left" KeyDown="TextBox_KeyDown">
+                <Binding Path="Url" UpdateSourceTrigger="PropertyChanged">
+                    <Binding.ValidationRules>
+                        <DataErrorValidationRule />
+                    </Binding.ValidationRules>
+                </Binding>
             </TextBox>
+            <!--..<TextBox x:Name="urlInput" Width="600" Margin="0,0,0,0" HorizontalAlignment="Left" Text="{Binding Url, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"> -->
             <TextBlock Margin="0,20,0,0" Foreground="#f8f8f2"> Rate Me :):</TextBlock>
             <!-- 
             <TextBox Width="600" HorizontalAlignment="Left" Text="{Binding Rating, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidationRules=DataErrorValidationRule}"></TextBox>
             -->
-            <TextBox Width="600" HorizontalAlignment="Left">
+            <TextBox Width="600" HorizontalAlignment="Left" KeyDown="TextBox_KeyDown">
                 <TextBox.Text>
                     <Binding Path="Rating" UpdateSourceTrigger="PropertyChanged">
                         <Binding.ValidationRules>

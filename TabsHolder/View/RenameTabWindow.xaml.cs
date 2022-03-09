@@ -23,7 +23,7 @@ namespace TabsHolder
         {
             
             InitializeComponent();
-            DataContext = new RenameTabViewModel();
+            DataContext = new EditTabViewModel();
 
             MessengerStatic.RenameTabWindowClosed += CloseWin;
 
@@ -32,6 +32,15 @@ namespace TabsHolder
         private void CloseWin(object obj)
         {
             this.Close();
+        }
+
+        private void TextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Return)
+            {
+                this.Title = "Processing, please wait...";
+                MessengerStatic.NotifyAboutTabItemAddingByEnter();
+            }
         }
     }
 }

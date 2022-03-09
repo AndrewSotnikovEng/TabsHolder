@@ -38,6 +38,9 @@
                 <Separator/>
                 <MenuItem Header="Exit" Click="MainWindowClose" />
             </MenuItem>
+            <MenuItem Header="Tools">
+                <MenuItem Header="Settings" Command="{Binding OpenSettingsWindowCmd}"/>
+            </MenuItem>
             <MenuItem Header="Help">
                 <MenuItem Header="About" Command="{Binding OpenAboutWindowCmd}"/>
             </MenuItem>
@@ -67,7 +70,7 @@
             <StackPanel Orientation="Vertical">
                 <Button Name="AddBtn" Style="{StaticResource Button}" Command="{Binding AddBtnClickCmd}" >Add</Button>
                 <Button Name="DeleteBtn" Style="{StaticResource Button}" Command="{Binding DeleteTabItemCmd}" >Delete</Button>
-                <Button Name="RenameBtn" Style="{StaticResource Button}" Command="{Binding RenameTabItemCmd}" >Rename</Button>
+                <Button Name="EditBtn" Style="{StaticResource Button}" Command="{Binding EditTabItemCmd}" >Edit</Button>
                 <Button Name="Open" Style="{StaticResource Button}" Margin="0,100,0,0" Command="{Binding OpenInFirefoxCmd}" >Open</Button>
             </StackPanel>
         </StackPanel>
