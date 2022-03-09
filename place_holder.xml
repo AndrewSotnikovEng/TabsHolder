@@ -16,6 +16,10 @@
         <Build>
         <VersionName>v1.3</VersionName>
         <Url>https://github.com/AndrewSotnikovEng/TabsHolder/releases/download/v1.3/TabsHolder.zip</Url>
-    </Build> 
+    </Build>
+	<Build>
+        <VersionName>v1.4</VersionName>
+        <Url>https://github.com/AndrewSotnikovEng/TabsHolder/releases/download/v1.4/TabsHolder.zip</Url>
+    </Build>
     </Builds>
 </BuildHolder>
