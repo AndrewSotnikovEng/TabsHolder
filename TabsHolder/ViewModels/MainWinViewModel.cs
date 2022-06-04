@@ -96,7 +96,7 @@ namespace TabsHolder
             WireFilter();
 
             DeleteTabItemCmd = new RelayCommand(o => { DeleteTabItem(); }, DeleteTabItemCanExecute);
-            OpenInFirefoxCmd = new RelayCommand(o => { OpenInFirefox(); });
+            OpenInFirefoxCmd = new RelayCommand(o => { OpenInDefaultBrowser(); });
             OpenAboutWindowCmd = new RelayCommand(o => { OpenAboutWindow(); });
             OpenSettingsWindowCmd = new RelayCommand(o => { OpenSettingsWindow(); });
             AddBtnClickCmd = new RelayCommand(o => { AddBtnСlick(); }, AddBtnClickCanExecute);
@@ -383,6 +383,27 @@ namespace TabsHolder
             get;
             private set;
         }
+
+        private void OpenInDefaultBrowser()
+        {
+            //get urls
+            List<string> urls = new List<string>();
+            foreach (TabItem item in TabItems)
+            {
+                if (item.IsCheckedBoolean)
+                {
+                    urls.Add(item.Url);
+                }
+            }
+            if (urls.Count == 0) return;
+
+            foreach (string url in urls)
+            {
+                System.Diagnostics.Process.Start(url);
+            }
+            
+        }
+
         private void OpenInFirefox()
         {
             //get urls
